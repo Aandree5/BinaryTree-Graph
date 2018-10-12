@@ -40,15 +40,32 @@ int main()
 	for(MATRIX sm : m)
 	{
 		int i, c = 0, l = 0, C = sm.size(), L = sm.size();
+		int b = 0;
 		
 		while(c < C && l < L)
 		{
-			for(i = (l > c ? l : c); i < (l > c ? L : C); i++)
+			if(!b)
 			{
-				cout << sm[(l > c ? i : l)][(l > c ? l : i)] << " ";
+				for(i = (c > l ? c : l); i < (c > l ? C : L); i++)
+				{
+					cout << sm[(c > l ? i : l)][(c > l ? C - c : i)] << " ";
+				}
+				c > l ? l++ : c++;
+				cout << endl;
+
+				b = (c % 2 != 0 && l % 2 != 0 ? 1 : 0);
 			}
- 			l > c ? C-- : l++;
-			cout << endl;
+			else
+			{
+				for(i = (c > l ? c : l); i < (c > l ? C : L); i++)
+				{
+					cout << sm[(c > l ? L - i - 1 : L - l)][(c > l ? 0 : C - i - 1)] << " ";
+				}
+				c > l ? l++ : c++;
+				cout << endl;
+				
+				b = (c % 2 == 0 && l % 2 == 0 ? 0 : 1);
+			}
 		}
 		
 		cout << endl;
