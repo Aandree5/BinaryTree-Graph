@@ -8,55 +8,72 @@ using MATRIX = vector<LINE>;
 
 int main()
 {
-	vector<MATRIX> m;
+	vector<MATRIX> m = vector<MATRIX>();
 	
 	// READ FILE
 	ifstream f;  
 	f.open ("matrix.txt");
-	if (f.is_open())
+	string l;
+	MATRIX tm = MATRIX();
+	while (getline (f, l))
 	{
-		string l;
-		MATRIX tm;
-		while (getline (f, l))
+		if(l == "")
 		{
-			LINE t;
-			
-			if(l == "")
-			{
-				m.push_back(tm);
-				tm.clear();
-			}
-			else
-			{
-				for(char c : l)
-					if (c != ' ')
-						t.push_back(c);
-
-				tm.push_back(t);
-			}
+			m.push_back(tm);
+			tm.clear();
 		}
-		
-		m.push_back(tm);
-		f.close();
+		else
+		{
+			LINE t = LINE();
+			for(char c : l)
+				if (c != ' ')
+					t.push_back(c);
+
+			tm.push_back(t);
+		}
 	}
+	m.push_back(tm);
+	f.close();
 	
 	
 	// PRINT SPIRAL
 	for(MATRIX sm : m)
 	{
-		int i, c, l = 0;
-		int C, L = sm.size();
+		int i, c = 0, l = 0, C = sm.size(), L = sm.size();
+		
 		while(c < C && l < L)
 		{
-// 			for(i = l; i < C; i++)
-// 			{
-// 				cout << to_string(sm[c][i]);
-// 			}
-			cout << endl << to_string(sm.size());
-			cout << sm[0][0] << endl;
- 			l++;
+			for(i = (l > c ? l : c); i < (l > c ? L : C); i++)
+			{
+				cout << sm[(l > c ? i : l)][(l > c ? l : i)] << " ";
+			}
+ 			l > c ? C-- : l++;
+			cout << endl;
 		}
+		
+		cout << endl;
 	}
+	
+	
+// 		for(MATRIX sm : m)
+// 	{
+// 		int i, c = 0, l = 0, C = sm.size(), L = sm.size();
+		
+// 		while(c < C && l < L)
+// 		{
+// 			for(i = c; i < C; i++)
+// 			{
+// 				cout << sm[l][i] << " ";
+// 			}
+//  		l++;
+// 			cout << endl;
+// 		}
+		
+// 		cout << endl;
+// 	}
+	
+	
+	
 	
 	
 	// TEST PRINT LOADED FILE
