@@ -1,38 +1,22 @@
 #pragma once
-#include <memory>
 #include <string>
 #include <iostream>
+#include <memory>
+#include "BinaryTreeNode.h"
 
 using namespace std;
-
-class Node
-{
-public:
-	string value;
-	shared_ptr<Node> prev;
-	shared_ptr<Node> next;
-
-	Node(string value);
-	~Node();
-};
-
-class LinkedList
-{
-public:
-	shared_ptr<Node> head;
-	shared_ptr<Node> tail;
-
-	LinkedList();
-	~LinkedList();
-
-	void push_back(string value);
-};
 
 class BinaryTree
 {
 public:
-	unique_ptr<LinkedList> list;
+	shared_ptr<BinaryTreeNode> root;
 
 	BinaryTree();
 	~BinaryTree();
+
+	shared_ptr<BinaryTreeNode> insert(string value);
+	shared_ptr<BinaryTreeNode> insert(string value, shared_ptr<BinaryTreeNode> &node);
+
+	void printInOrder(shared_ptr<BinaryTreeNode> node = nullptr);
+	void printPostOrder(shared_ptr<BinaryTreeNode> node = nullptr);
 };
