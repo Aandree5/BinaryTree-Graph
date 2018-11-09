@@ -12,7 +12,13 @@ public:
 	weak_ptr<BinaryTreeNode> parent;
 	shared_ptr<BinaryTreeNode> left;
 	shared_ptr<BinaryTreeNode> right;
+	int frequency;
 
 	BinaryTreeNode(string value);
 	~BinaryTreeNode();
+
+	int increaseFrequency();
+	int decreaseFrequency();
+	bool isLeaf();
+	bool hasOnlyOnechild();
 };
