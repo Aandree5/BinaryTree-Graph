@@ -37,7 +37,11 @@ bool BinaryTreeNode::isLeaf()
 	return (!left && !right);
 }
 
-bool BinaryTreeNode::hasOnlyOnechild()
+shared_ptr<BinaryTreeNode> BinaryTreeNode::hasOnlyOnechild()
 {
-	return (!left || !right) && (left != right);
+	if ((!left || !right) && (left != right))
+		return (left ? left : right);
+
+	else
+		return nullptr;
 }

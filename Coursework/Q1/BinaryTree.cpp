@@ -40,6 +40,7 @@ shared_ptr<BinaryTreeNode> BinaryTree::insert(string value, shared_ptr<BinaryTre
 		{
 			child = make_shared<BinaryTreeNode>(value);
 			child->parent = node;
+
 			return child;
 		}
 		else
@@ -52,18 +53,20 @@ shared_ptr<BinaryTreeNode> BinaryTree::find(string value)
 	return find(value, root);
 }
 
-shared_ptr<BinaryTreeNode> BinaryTree::find(string value, shared_ptr<BinaryTreeNode> node)
+shared_ptr<BinaryTreeNode> BinaryTree::find(string value, shared_ptr<BinaryTreeNode> &node)
 {
 	if (!node)
 	{
-		cout << "NOT FOUND!" << endl;
+		cout << " ### NO ###" << endl;
 
 		return nullptr;
 	}
 
 	if (value == node->value)
 	{
-		cout << node->value << endl;
+		cout << node->value;
+
+		cout << " ### YES ###" << endl;
 
 		return node;
 	}
@@ -73,24 +76,38 @@ shared_ptr<BinaryTreeNode> BinaryTree::find(string value, shared_ptr<BinaryTreeN
 	return find(value, (value < node->value ? node->left : node->right));
 }
 
-shared_ptr<BinaryTreeNode> BinaryTree::remove(string value)
+string BinaryTree::remove(string value)
 {
 	shared_ptr<BinaryTreeNode> node = find(value);
 
-	return remove(node);
+	return (node ? remove(node) : nullptr);
 }
 
-shared_ptr<BinaryTreeNode> BinaryTree::remove(shared_ptr<BinaryTreeNode> &node)
+string BinaryTree::remove(shared_ptr<BinaryTreeNode> &node)
 {
-	shared_ptr<BinaryTreeNode> removedNode = make_shared<BinaryTreeNode>(*node);
-	shared_ptr<BinaryTreeNode> nodeToReassign = nullptr;
+	string removedValue =node->value;
+	shared_ptr<BinaryTreeNode> parent = node->parent.lock();
 
 	// Check children
 	if (node->isLeaf())
-		nodeToReassign = nullptr;
+	{
+		if (parent)
+			(parent->left == node ? parent->left : parent->right) = nullptr;
 
-	else if (node->hasOnlyOnechild())
-		nodeToReassign = (node->left != nullptr ? node->left : node->right);
+		else
+			root = nullptr;
+	}
+	else if (shared_ptr<BinaryTreeNode> child = node->hasOnlyOnechild())
+	{
+		// Check parent or root
+		if (parent)
+		{
+			(parent->left == node ? parent->left : parent->right) = child;
+			child->parent = parent;
+		}
+		else
+			root = child;
+	}
 
 	else
 	{
@@ -100,22 +117,12 @@ shared_ptr<BinaryTreeNode> BinaryTree::remove(shared_ptr<BinaryTreeNode> &node)
 		node->frequency = replacerNode->frequency;
 
 		remove(replacerNode);
-
-		return removedNode;
 	}
 
-	// Check parent or root
-	shared_ptr<BinaryTreeNode> parent = node->parent.lock();
-	if (parent)
-		(parent->left == node ? parent->left : parent->right) = nodeToReassign;
-
-	else
-		root = nodeToReassign;
-
-	return removedNode;
+	return removedValue;
 }
 
-pair<shared_ptr<BinaryTreeNode>, int> BinaryTree::findMax(shared_ptr<BinaryTreeNode> node, int nodesCounted)
+pair<shared_ptr<BinaryTreeNode>, int> BinaryTree::findMax(shared_ptr<BinaryTreeNode> &node, int nodesCounted)
 {
 	if (!node->right)
 		return pair<shared_ptr<BinaryTreeNode>, int>(node, nodesCounted);
@@ -123,7 +130,7 @@ pair<shared_ptr<BinaryTreeNode>, int> BinaryTree::findMax(shared_ptr<BinaryTreeN
 	return findMax(node->right, nodesCounted++);
 }
 
-pair<shared_ptr<BinaryTreeNode>, int> BinaryTree::findMin(shared_ptr<BinaryTreeNode> node, int nodesCounted)
+pair<shared_ptr<BinaryTreeNode>, int> BinaryTree::findMin(shared_ptr<BinaryTreeNode> &node, int nodesCounted)
 {
 	if (!node->left)
 		return pair<shared_ptr<BinaryTreeNode>, int>(node, nodesCounted);
@@ -131,7 +138,7 @@ pair<shared_ptr<BinaryTreeNode>, int> BinaryTree::findMin(shared_ptr<BinaryTreeN
 	return findMin(node->left, nodesCounted++);
 }
 
-shared_ptr<BinaryTreeNode> BinaryTree::getBiggestSubTreeNode(shared_ptr<BinaryTreeNode> node)
+shared_ptr<BinaryTreeNode> BinaryTree::getBiggestSubTreeNode(shared_ptr<BinaryTreeNode> &node)
 {
 	pair<shared_ptr<BinaryTreeNode>, int> min = findMin(node->right);
 	pair<shared_ptr<BinaryTreeNode>, int> max = findMax(node->left);
@@ -165,4 +172,31 @@ void BinaryTree::printPostOrder(shared_ptr<BinaryTreeNode> node)
 		printInOrder(node->right);
 
 	cout << to_string(node->frequency) << " " << node->value << endl;
+}
+
+void BinaryTree::print(shared_ptr<BinaryTreeNode> node)
+{
+	if (!node)
+		node = root;
+
+
+	shared_ptr<BinaryTreeNode> parent = node->parent.lock();
+
+	while (parent)
+	{
+		cout << "| ";
+
+		parent = parent->parent.lock();
+	}
+
+
+	if (parent = node->parent.lock())
+		cout << (node == parent->left ? "-" : "+") << "> ";
+
+	cout << to_string(node->frequency) << " " << node->value << endl;
+
+	if (node->left)
+		print(node->left);
+	if (node->right)
+		print(node->right);
 }

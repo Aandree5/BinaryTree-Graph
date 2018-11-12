@@ -20,5 +20,5 @@ public:
 	int increaseFrequency();
 	int decreaseFrequency();
 	bool isLeaf();
-	bool hasOnlyOnechild();
+	shared_ptr<BinaryTreeNode> hasOnlyOnechild();
 };
