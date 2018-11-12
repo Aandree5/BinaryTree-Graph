@@ -88,7 +88,6 @@ string BinaryTree::remove(shared_ptr<BinaryTreeNode> &node)
 	string removedValue =node->value;
 	shared_ptr<BinaryTreeNode> parent = node->parent.lock();
 
-	// Check children
 	if (node->isLeaf())
 	{
 		if (parent)
@@ -99,7 +98,6 @@ string BinaryTree::remove(shared_ptr<BinaryTreeNode> &node)
 	}
 	else if (shared_ptr<BinaryTreeNode> child = node->hasOnlyOnechild())
 	{
-		// Check parent or root
 		if (parent)
 		{
 			(parent->left == node ? parent->left : parent->right) = child;
@@ -184,7 +182,7 @@ void BinaryTree::print(shared_ptr<BinaryTreeNode> node)
 
 	while (parent)
 	{
-		cout << "| ";
+		cout << "|  ";
 
 		parent = parent->parent.lock();
 	}
