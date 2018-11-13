@@ -23,6 +23,9 @@ public:
 	string remove(string value);
 	string remove(shared_ptr<BinaryTreeNode> &node);
 
+	int checkBalance(shared_ptr<BinaryTreeNode> &node);
+	void balanceTree(shared_ptr<BinaryTreeNode> &node);
+
 	pair<shared_ptr<BinaryTreeNode>, int> findMax(shared_ptr<BinaryTreeNode> &node, int nodesCounted = 1);
 	pair<shared_ptr<BinaryTreeNode>, int> findMin(shared_ptr<BinaryTreeNode> &node, int nodesCounted = 1);
 	shared_ptr<BinaryTreeNode> getBiggestSubTreeNode(shared_ptr<BinaryTreeNode> &node);

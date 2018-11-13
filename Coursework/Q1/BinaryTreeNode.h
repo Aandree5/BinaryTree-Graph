@@ -13,12 +13,11 @@ public:
 	shared_ptr<BinaryTreeNode> left;
 	shared_ptr<BinaryTreeNode> right;
 	int frequency;
+	int depth;
 
 	BinaryTreeNode(string value);
 	~BinaryTreeNode();
 
-	int increaseFrequency();
-	int decreaseFrequency();
 	bool isLeaf();
 	shared_ptr<BinaryTreeNode> hasOnlyOnechild();
 };

@@ -20,7 +20,7 @@ shared_ptr<BinaryTreeNode> BinaryTree::insert(string value)
 
 shared_ptr<BinaryTreeNode> BinaryTree::insert(string value, shared_ptr<BinaryTreeNode> &node)
 {
-	if (!node)
+	if (!node) // For the root case
 	{
 		node = make_shared<BinaryTreeNode>(value);
 
@@ -28,7 +28,7 @@ shared_ptr<BinaryTreeNode> BinaryTree::insert(string value, shared_ptr<BinaryTre
 	}
 	else if (value == node->value)
 	{
-		node->increaseFrequency();
+		node->frequency++;
 
 		return node;
 	}
@@ -38,6 +38,15 @@ shared_ptr<BinaryTreeNode> BinaryTree::insert(string value, shared_ptr<BinaryTre
 
 		if (!child)
 		{
+			if (node->isLeaf())
+			{
+				node->depth++;
+
+				shared_ptr<BinaryTreeNode> parent = node->parent.lock();
+				if (parent)
+					balanceTree(parent);
+			}
+
 			child = make_shared<BinaryTreeNode>(value);
 			child->parent = node;
 
@@ -45,6 +54,28 @@ shared_ptr<BinaryTreeNode> BinaryTree::insert(string value, shared_ptr<BinaryTre
 		}
 		else
 			return insert(value, child);
+	}
+}
+
+int BinaryTree::checkBalance(shared_ptr<BinaryTreeNode> &node)
+{
+	int depthLeft = (node->left ? node->left->depth : 0);
+	int depthRight = (node->right ? node->right->depth : 0);
+
+	return depthRight - depthLeft;
+}
+
+void BinaryTree::balanceTree(shared_ptr<BinaryTreeNode> &node)
+{
+	int balance = checkBalance(node);
+
+	// CHECK IS BALANCED
+	if (balance < -1 || balance > 1)
+	{
+
+		// BALANCE TREE
+
+		// FIX PARENT DEPTH
 	}
 }
 
@@ -91,8 +122,12 @@ string BinaryTree::remove(shared_ptr<BinaryTreeNode> &node)
 	if (node->isLeaf())
 	{
 		if (parent)
+		{
 			(parent->left == node ? parent->left : parent->right) = nullptr;
 
+			parent->depth--;
+			balanceTree(parent);
+		}
 		else
 			root = nullptr;
 	}
@@ -109,10 +144,13 @@ string BinaryTree::remove(shared_ptr<BinaryTreeNode> &node)
 
 	else
 	{
-		shared_ptr<BinaryTreeNode> replacerNode = getBiggestSubTreeNode(node);
+		shared_ptr<BinaryTreeNode> replacerNode = getBiggestSubTreeNode(node); // IT WILL BE BALANCED SO NO NEED FOR THIS FUNCTION
+		string v = node->value;
 
 		node->value = replacerNode->value;
 		node->frequency = replacerNode->frequency;
+
+		replacerNode->value = v;
 
 		remove(replacerNode);
 	}
@@ -191,7 +229,7 @@ void BinaryTree::print(shared_ptr<BinaryTreeNode> node)
 	if (parent = node->parent.lock())
 		cout << (node == parent->left ? "-" : "+") << "> ";
 
-	cout << to_string(node->frequency) << " " << node->value << endl;
+	cout << to_string(node->depth) << ") " << to_string(node->frequency) << " " << node->value << endl;
 
 	if (node->left)
 		print(node->left);
