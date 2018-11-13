@@ -38,17 +38,10 @@ shared_ptr<BinaryTreeNode> BinaryTree::insert(string value, shared_ptr<BinaryTre
 
 		if (!child)
 		{
-			if (node->isLeaf())
-			{
-				node->depth++;
-
-				shared_ptr<BinaryTreeNode> parent = node->parent.lock();
-				if (parent)
-					balanceTree(parent);
-			}
-
 			child = make_shared<BinaryTreeNode>(value);
 			child->parent = node;
+
+			balanceTree(child);
 
 			return child;
 		}
@@ -69,13 +62,40 @@ void BinaryTree::balanceTree(shared_ptr<BinaryTreeNode> &node)
 {
 	int balance = checkBalance(node);
 
-	// CHECK IS BALANCED
-	if (balance < -1 || balance > 1)
+	if (balance > -1 || balance < 1)
 	{
+		shared_ptr<BinaryTreeNode> parent = node->parent.lock();
+		if (parent)
+		{
+			parent->depth = node->depth + 1;
+			balanceTree(parent);
+		}
+	}
+	else if (balance < -1)
+	{
+		shared_ptr<BinaryTreeNode> tempRight = node->left->right;
 
-		// BALANCE TREE
+		node->left->right = node;
+		node->left->parent = node->parent;
 
-		// FIX PARENT DEPTH
+		node->depth = node->left->depth - 1;
+		node->parent = node->left;
+		node->left = tempRight;
+
+		tempRight->parent = node;
+	}
+	else if (balance > 1)
+	{
+		shared_ptr<BinaryTreeNode> tempLeft = node->right->left;
+
+		node->right->left = node;
+		node->right->parent = node->parent;
+
+		node->depth = node->right->depth - 1;
+		node->parent = node->right;
+		node->right = tempLeft;
+
+		tempLeft->parent = node;
 	}
 }
 
@@ -122,12 +142,8 @@ string BinaryTree::remove(shared_ptr<BinaryTreeNode> &node)
 	if (node->isLeaf())
 	{
 		if (parent)
-		{
 			(parent->left == node ? parent->left : parent->right) = nullptr;
-
-			parent->depth--;
-			balanceTree(parent);
-		}
+		
 		else
 			root = nullptr;
 	}
