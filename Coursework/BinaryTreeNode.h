@@ -12,7 +12,11 @@ public:
 	weak_ptr<BinaryTreeNode> parent;
 	shared_ptr<BinaryTreeNode> left;
 	shared_ptr<BinaryTreeNode> right;
+
+	///<summary>Number of times this node's <paramref name="value"/> was added to the tree.</summary>
 	int frequency;
+
+	///<summary>Distance from this node to the farthest leaf.</summary>
 	int depth;
 
 	BinaryTreeNode(string value);

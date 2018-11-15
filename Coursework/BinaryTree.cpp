@@ -56,7 +56,7 @@ shared_ptr<BinaryTreeNode> BinaryTree::insert(string value)
 }
 
 
-int BinaryTree::checkBalance(shared_ptr<BinaryTreeNode> &node)
+int BinaryTree::checkBalance(shared_ptr<BinaryTreeNode> node)
 {
 	int depthLeft = (node->left ? node->left->depth : 0);
 	int depthRight = (node->right ? node->right->depth : 0);
@@ -73,7 +73,9 @@ void BinaryTree::balanceTree(shared_ptr<BinaryTreeNode> &node)
 		shared_ptr<BinaryTreeNode> parent = node->parent.lock();
 		if (parent)
 		{
-			parent->depth = node->depth + 1;
+			if (parent->depth < node->depth + 1)
+				parent->depth = node->depth + 1;
+
 			balanceTree(parent);
 		}
 	}
@@ -90,7 +92,6 @@ void BinaryTree::balanceTree(shared_ptr<BinaryTreeNode> &node)
 		else
 			root = node->left;
 
-		node->depth = node->left->depth - 1;
 		node->parent = node->left;
 
 		if (tempRight)
@@ -101,6 +102,19 @@ void BinaryTree::balanceTree(shared_ptr<BinaryTreeNode> &node)
 		}
 		else
 			node->left = nullptr;
+
+		if (node->isLeaf())
+			node->depth = 1;
+
+		else if (node->hasOnlyOnechild())
+			node->depth = node->hasOnlyOnechild()->depth + 1;
+
+		else
+			node->depth = (node->left->depth > node->right->depth ? node->left->depth: node->right->depth) + 1;
+
+		shared_ptr<BinaryTreeNode> parent = node->parent.lock();
+		if (parent && parent->depth < node->depth + 1)
+				parent->depth = node->depth + 1;
 	}
 	else if (balance > 1) // Right heavy
 	{
@@ -115,7 +129,6 @@ void BinaryTree::balanceTree(shared_ptr<BinaryTreeNode> &node)
 		else
 			root = node->right;
 
-		node->depth = node->right->depth - 1;
 		node->parent = node->right;
 
 		if (tempLeft)
@@ -126,7 +139,21 @@ void BinaryTree::balanceTree(shared_ptr<BinaryTreeNode> &node)
 		}
 		else
 			node->right = nullptr;
+
 	}
+
+	if (node->isLeaf())
+		node->depth = 1;
+
+	else if (node->hasOnlyOnechild())
+		node->depth = node->hasOnlyOnechild()->depth + 1;
+
+	else
+		node->depth = node->left->depth > node->right->depth ? node->left->depth + 1 : node->right->depth + 1;
+
+	shared_ptr<BinaryTreeNode> parent = node->parent.lock();
+	if (parent && parent->depth < node->depth + 1)
+		parent->depth = node->depth + 1;
 }
 
 shared_ptr<BinaryTreeNode> BinaryTree::find(string value)

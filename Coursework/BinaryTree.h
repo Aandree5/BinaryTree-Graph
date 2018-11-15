@@ -31,11 +31,13 @@ public:
 	string remove(string value);
 
 	///<summary>Remove the given node from the tree.</summary>
-	///<param name="&node">Reference of the pointer to the node to be removed.</param>
+	///<param name="node">Reference of the pointer to the node to be removed.</param>
 	///<returns>If exists, the value of the removed node, if not found, an empty string.</returns>
 	string remove(shared_ptr<BinaryTreeNode> &node);
 
-	int checkBalance(shared_ptr<BinaryTreeNode> &node);
+	///<summary>Check the given node balance, if balenced, leaft heavy or right heavy.</summary>
+	///<param name="node">Reference </param>
+	int checkBalance(shared_ptr<BinaryTreeNode> node);
 	void balanceTree(shared_ptr<BinaryTreeNode> &node);
 
 	pair<shared_ptr<BinaryTreeNode>, int> findMax(shared_ptr<BinaryTreeNode> &node, int nodesCounted = 1);
