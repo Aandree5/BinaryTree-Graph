@@ -2,6 +2,5 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/.vs
-/Coursework/Q1/Debug
-/Coursework/Q1/x64/Debug
+/Coursework/.vs/Coursework/v15
+/Coursework/x64
