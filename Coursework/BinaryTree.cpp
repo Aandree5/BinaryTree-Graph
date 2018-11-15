@@ -55,7 +55,6 @@ shared_ptr<BinaryTreeNode> BinaryTree::insert(string value)
 	return current;
 }
 
-
 int BinaryTree::checkBalance(shared_ptr<BinaryTreeNode> node)
 {
 	int depthLeft = (node->left ? node->left->depth : 0);
@@ -64,31 +63,38 @@ int BinaryTree::checkBalance(shared_ptr<BinaryTreeNode> node)
 	return depthRight - depthLeft;
 }
 
+int BinaryTree::getCorrectDepth(shared_ptr<BinaryTreeNode> node)
+{
+	if (node->isLeaf())
+		return 1;
+
+	else if (shared_ptr<BinaryTreeNode> child = node->hasOnlyOnechild())
+		return child->depth + 1;
+
+	else
+		return (node->left->depth > node->right->depth ? node->left->depth : node->right->depth) + 1;
+}
+
 void BinaryTree::balanceTree(shared_ptr<BinaryTreeNode> &node)
 {
 	int balance = checkBalance(node);
 
 	if (balance >= -1 && balance <= 1)
 	{
-		shared_ptr<BinaryTreeNode> parent = node->parent.lock();
-		if (parent)
-		{
-			if (parent->depth < node->depth + 1)
-				parent->depth = node->depth + 1;
+		node->depth = getCorrectDepth(node);
 
+		if (shared_ptr<BinaryTreeNode> parent = node->parent.lock())
 			balanceTree(parent);
-		}
 	}
 	else if (balance < -1) // Left heavy
 	{
-
 		shared_ptr<BinaryTreeNode> tempRight = node->left->right;
 
 		node->left->right = node;
 		node->left->parent = node->parent;
 
-		if (node->parent.lock())
-			(node->parent.lock()->left == node ? node->parent.lock()->left : node->parent.lock()->right) = node->left;
+		if (shared_ptr<BinaryTreeNode> parent = node->parent.lock())
+			(parent->left == node ? parent->left : parent->right) = node->left;
 		else
 			root = node->left;
 
@@ -102,30 +108,16 @@ void BinaryTree::balanceTree(shared_ptr<BinaryTreeNode> &node)
 		}
 		else
 			node->left = nullptr;
-
-		if (node->isLeaf())
-			node->depth = 1;
-
-		else if (node->hasOnlyOnechild())
-			node->depth = node->hasOnlyOnechild()->depth + 1;
-
-		else
-			node->depth = (node->left->depth > node->right->depth ? node->left->depth: node->right->depth) + 1;
-
-		shared_ptr<BinaryTreeNode> parent = node->parent.lock();
-		if (parent && parent->depth < node->depth + 1)
-				parent->depth = node->depth + 1;
 	}
 	else if (balance > 1) // Right heavy
 	{
-
 		shared_ptr<BinaryTreeNode> tempLeft = node->right->left;
 
 		node->right->left = node;
 		node->right->parent = node->parent;
 
-		if (node->parent.lock())
-			(node->parent.lock()->left == node ? node->parent.lock()->left : node->parent.lock()->right) = node->right;
+		if (shared_ptr<BinaryTreeNode> parent = node->parent.lock())
+			(parent->left == node ? parent->left : parent->right) = node->right;
 		else
 			root = node->right;
 
@@ -139,21 +131,17 @@ void BinaryTree::balanceTree(shared_ptr<BinaryTreeNode> &node)
 		}
 		else
 			node->right = nullptr;
-
 	}
 
-	if (node->isLeaf())
-		node->depth = 1;
+	node->depth = getCorrectDepth(node);
 
-	else if (node->hasOnlyOnechild())
-		node->depth = node->hasOnlyOnechild()->depth + 1;
+	if (shared_ptr<BinaryTreeNode> parent = node->parent.lock())
+	{
+		parent->depth = getCorrectDepth(parent);
 
-	else
-		node->depth = node->left->depth > node->right->depth ? node->left->depth + 1 : node->right->depth + 1;
-
-	shared_ptr<BinaryTreeNode> parent = node->parent.lock();
-	if (parent && parent->depth < node->depth + 1)
-		parent->depth = node->depth + 1;
+		if (parent = parent->parent.lock())
+			balanceTree(parent);
+	}
 }
 
 shared_ptr<BinaryTreeNode> BinaryTree::find(string value)
@@ -194,14 +182,17 @@ string BinaryTree::remove(string value)
 
 string BinaryTree::remove(shared_ptr<BinaryTreeNode> &node)
 {
-	string removedValue =node->value;
+	string removedValue = node->value;
 	shared_ptr<BinaryTreeNode> parent = node->parent.lock();
 
 	if (node->isLeaf())
 	{
 		if (parent)
+		{
 			(parent->left == node ? parent->left : parent->right) = nullptr;
-		
+
+			balanceTree(parent);
+		}
 		else
 			root = nullptr;
 	}
@@ -212,43 +203,59 @@ string BinaryTree::remove(shared_ptr<BinaryTreeNode> &node)
 			(parent->left == node ? parent->left : parent->right) = child;
 			child->parent = parent;
 		}
-		else
+		else // Node parent is a weak pointer. no need to set null
 			root = child;
-	}
 
+
+		balanceTree(child);
+	}
 	else
 	{
-		shared_ptr<BinaryTreeNode> replacerNode = getBiggestSubTreeNode(node); // IT WILL BE BALANCED SO NO NEED FOR THIS FUNCTION
-		string v = node->value;
+		shared_ptr<BinaryTreeNode> replacerNode = getFurthestReplacerNode(node);
+		string value = node->value;
 
 		node->value = replacerNode->value;
 		node->frequency = replacerNode->frequency;
 
-		replacerNode->value = v;
+		replacerNode->value = value;
 
 		remove(replacerNode);
+
+		balanceTree(replacerNode);
 	}
 
 	return removedValue;
 }
 
-pair<shared_ptr<BinaryTreeNode>, int> BinaryTree::findMax(shared_ptr<BinaryTreeNode> &node, int nodesCounted)
+pair<shared_ptr<BinaryTreeNode>, int> BinaryTree::findMax(shared_ptr<BinaryTreeNode> node)
 {
-	if (!node->right)
-		return pair<shared_ptr<BinaryTreeNode>, int>(node, nodesCounted);
+	int count = 1;
 
-	return findMax(node->right, nodesCounted++);
+	while (node->right)
+	{
+		count++;
+
+		node = node->right;
+	}
+
+	return pair<shared_ptr<BinaryTreeNode>, int>(node, count);
 }
 
-pair<shared_ptr<BinaryTreeNode>, int> BinaryTree::findMin(shared_ptr<BinaryTreeNode> &node, int nodesCounted)
+pair<shared_ptr<BinaryTreeNode>, int> BinaryTree::findMin(shared_ptr<BinaryTreeNode> node)
 {
-	if (!node->left)
-		return pair<shared_ptr<BinaryTreeNode>, int>(node, nodesCounted);
+	int count = 1;
 
-	return findMin(node->left, nodesCounted++);
+	while (node->left)
+	{
+		count++;
+
+		node = node->left;
+	}
+	
+	return pair<shared_ptr<BinaryTreeNode>, int>(node, count);
 }
 
-shared_ptr<BinaryTreeNode> BinaryTree::getBiggestSubTreeNode(shared_ptr<BinaryTreeNode> &node)
+shared_ptr<BinaryTreeNode> BinaryTree::getFurthestReplacerNode(shared_ptr<BinaryTreeNode> node)
 {
 	pair<shared_ptr<BinaryTreeNode>, int> min = findMin(node->right);
 	pair<shared_ptr<BinaryTreeNode>, int> max = findMax(node->left);
