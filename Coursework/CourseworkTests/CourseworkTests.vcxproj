@@ -155,14 +155,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\BinaryTree.cpp" />
     <ClCompile Include="..\BinaryTreeNode.cpp" />
-    <ClCompile Include="CourseworkTests.cpp" />
+    <ClCompile Include="..\QueueBT.cpp" />
+    <ClCompile Include="..\QueueBTNode.cpp" />
+    <ClCompile Include="BinaryTreeNodeTests.cpp" />
+    <ClCompile Include="BinaryTreeTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Coursework.vcxproj">
       <Project>{4726cb96-b7db-486d-88b2-8e9852b824d0}</Project>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TestsHelper.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

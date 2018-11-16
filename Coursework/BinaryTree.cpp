@@ -6,13 +6,10 @@
 BinaryTree::BinaryTree()
 {
 	root = nullptr;
-
-	cout << "Binary Tree Created" << endl;
 }
 
 BinaryTree::~BinaryTree()
 {
-	cout << "Binary Tree Deleted" << endl;
 }
 
 shared_ptr<BinaryTreeNode> BinaryTree::insert(string value)
