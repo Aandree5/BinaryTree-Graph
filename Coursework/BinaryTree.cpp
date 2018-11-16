@@ -72,7 +72,7 @@ int BinaryTree::getCorrectDepth(shared_ptr<BinaryTreeNode> node)
 		return (node->left->depth > node->right->depth ? node->left->depth : node->right->depth) + 1;
 }
 
-void BinaryTree::balanceTree(shared_ptr<BinaryTreeNode> &node)
+void BinaryTree::balanceTree(shared_ptr<BinaryTreeNode> node)
 {
 	int balance = checkBalance(node);
 
@@ -83,89 +83,155 @@ void BinaryTree::balanceTree(shared_ptr<BinaryTreeNode> &node)
 		if (shared_ptr<BinaryTreeNode> parent = node->parent.lock())
 			balanceTree(parent);
 	}
-	else if (balance < -1) // Left heavy
+	else
 	{
-		shared_ptr<BinaryTreeNode> tempRight = node->left->right;
+		if (balance < -1) // Left heavy
+		{
+			int childBalance = checkBalance(node->left);
 
-		node->left->right = node;
-		node->left->parent = node->parent;
+			if (childBalance > 0) // left Right
+			{
+				shared_ptr<BinaryTreeNode> tempLeftRight = node->left->right;
+
+				if (tempLeftRight->left)
+					tempLeftRight->left->parent = node->left;
+
+				if (tempLeftRight->right)
+					tempLeftRight->right->parent = node;
+
+				node->left->right = tempLeftRight->left;
+				tempLeftRight->left = node->left;
+
+				if (shared_ptr<BinaryTreeNode> parent = node->parent.lock())
+					(parent->left == node ? parent->left : parent->right) = tempLeftRight;
+				else
+					root = tempLeftRight;
+
+				node->left = tempLeftRight->right;
+				tempLeftRight->right = node;
+
+				tempLeftRight->parent = node->parent;
+				node->parent = tempLeftRight;
+
+				tempLeftRight->depth = getCorrectDepth(tempLeftRight);
+				tempLeftRight->left->depth = getCorrectDepth(tempLeftRight->left);
+			}
+			else //Left Left
+			{
+				shared_ptr<BinaryTreeNode> tempRight = node->left->right;
+
+				node->left->right = node;
+				node->left->parent = node->parent;
+
+				if (shared_ptr<BinaryTreeNode> parent = node->parent.lock())
+					(parent->left == node ? parent->left : parent->right) = node->left;
+				else
+					root = node->left;
+
+				node->parent = node->left;
+
+				if (tempRight)
+				{
+					node->left = tempRight;
+
+					tempRight->parent = node;
+				}
+				else
+					node->left = nullptr;
+			}
+		}
+		else if (balance > 1) // Right heavy
+		{
+			int childBalance = checkBalance(node->right);
+
+			if (childBalance < 0) // Right Left
+			{
+				shared_ptr<BinaryTreeNode> tempRightLeft = node->right->left;
+
+				if (tempRightLeft->right)
+					tempRightLeft->right->parent = node->right;
+
+				if (tempRightLeft->left)
+					tempRightLeft->left->parent = node;
+
+				node->right->left = tempRightLeft->right;
+				tempRightLeft->right = node->right;
+
+				node->right = tempRightLeft->left;
+				tempRightLeft->left = node;
+
+				if (shared_ptr<BinaryTreeNode> parent = node->parent.lock())
+					(parent->left == node ? parent->left : parent->right) = tempRightLeft;
+				else
+					root = tempRightLeft;
+
+				tempRightLeft->parent = node->parent;
+				node->parent = tempRightLeft;
+
+				tempRightLeft->depth = getCorrectDepth(tempRightLeft);
+				tempRightLeft->right->depth = getCorrectDepth(tempRightLeft->right);
+			}
+			else // Right Right
+			{
+				shared_ptr<BinaryTreeNode> tempLeft = node->right->left;
+
+				node->right->left = node;
+				node->right->parent = node->parent;
+
+				if (shared_ptr<BinaryTreeNode> parent = node->parent.lock())
+					(parent->left == node ? parent->left : parent->right) = node->right;
+				else
+					root = node->right;
+
+				node->parent = node->right;
+
+				if (tempLeft)
+				{
+					node->right = tempLeft;
+
+					tempLeft->parent = node;
+				}
+				else
+					node->right = nullptr;
+			}
+		}
+
+		node->depth = getCorrectDepth(node);
 
 		if (shared_ptr<BinaryTreeNode> parent = node->parent.lock())
-			(parent->left == node ? parent->left : parent->right) = node->left;
-		else
-			root = node->left;
-
-		node->parent = node->left;
-
-		if (tempRight)
 		{
-			node->left = tempRight;
+			parent->depth = getCorrectDepth(parent);
 
-			tempRight->parent = node;
+			if (parent = parent->parent.lock())
+				balanceTree(parent);
 		}
-		else
-			node->left = nullptr;
-	}
-	else if (balance > 1) // Right heavy
-	{
-		shared_ptr<BinaryTreeNode> tempLeft = node->right->left;
-
-		node->right->left = node;
-		node->right->parent = node->parent;
-
-		if (shared_ptr<BinaryTreeNode> parent = node->parent.lock())
-			(parent->left == node ? parent->left : parent->right) = node->right;
-		else
-			root = node->right;
-
-		node->parent = node->right;
-
-		if (tempLeft)
-		{
-			node->right = tempLeft;
-
-			tempLeft->parent = node;
-		}
-		else
-			node->right = nullptr;
-	}
-
-	node->depth = getCorrectDepth(node);
-
-	if (shared_ptr<BinaryTreeNode> parent = node->parent.lock())
-	{
-		parent->depth = getCorrectDepth(parent);
-
-		if (parent = parent->parent.lock())
-			balanceTree(parent);
 	}
 }
 
 shared_ptr<BinaryTreeNode> BinaryTree::find(string value)
 {
-	if (!root)
-	{
-		cout << "No nodes in the tree." << endl;
-
-		return nullptr;
-	}
-	 
-	cout << "?(" << value << "): ";
-
 	shared_ptr<BinaryTreeNode> current = root;
 
-	while (current && current->value != value)
+	cout << "?(" << value << "): ";
+
+	do
 	{
-		cout << current->value << " > ";
-
-		current = (value < current->value ? current->left : current->right);
-
 		if (!current)
 			cout << " ### NO ###" << endl;
 
 		else if (current->value == value)
+		{
 			cout << current->value << " ### YES ###" << endl;
-	}
+
+			break;
+		}
+		else
+		{
+			cout << current->value << " > ";
+
+			current = (value < current->value ? current->left : current->right);
+		}
+	} while (current);
 
 	return current;
 }
@@ -177,7 +243,7 @@ string BinaryTree::remove(string value)
 	return (node ? remove(node) : "");
 }
 
-string BinaryTree::remove(shared_ptr<BinaryTreeNode> &node)
+string BinaryTree::remove(shared_ptr<BinaryTreeNode> node)
 {
 	string removedValue = node->value;
 	shared_ptr<BinaryTreeNode> parent = node->parent.lock();

@@ -31,9 +31,9 @@ public:
 	string remove(string value);
 
 	///<summary>Remove the given node from the tree.</summary>
-	///<param name="node">Reference of the pointer to the node to be removed.</param>
+	///<param name="node">Pointer to the node to be removed.</param>
 	///<returns>If exists, the value of the removed node, as a string, if not found, an empty string.</returns>
-	string remove(shared_ptr<BinaryTreeNode> &node);
+	string remove(shared_ptr<BinaryTreeNode> node);
 
 	///<summary>Check the given node's balance, if balenced, leaft heavy or right heavy.</summary>
 	///<param name="node">Node to check the childs balance.</param>
@@ -46,8 +46,8 @@ public:
 	int getCorrectDepth(shared_ptr<BinaryTreeNode> node);
 
 	///<summary>Balance the tree from the given node up.</summary>
-	///<param name="node">Reference of the node to balance.</param>
-	void balanceTree(shared_ptr<BinaryTreeNode> &node);
+	///<param name="node">Pointer of the node to balance.</param>
+	void balanceTree(shared_ptr<BinaryTreeNode> node);
 
 	///<summary>Find the maximum value node from the given node.</summary>
 	///<param name="node">Node to find it's biggest value.</param>

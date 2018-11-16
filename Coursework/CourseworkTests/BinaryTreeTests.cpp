@@ -175,4 +175,67 @@ public:
 
 		Assert::IsTrue(passed, L"Invalid argument exception not thrown.");
 	}
+
+	TEST_METHOD(CheckBalance_NoRoot_ReturnBalanced)
+	{
+		unique_ptr<BinaryTree> tree = make_unique<BinaryTree>();
+		
+		Assert::AreEqual(0, tree->checkBalance(tree->root), L"No root should return 0 for balanced.");
+	}
+
+	TEST_METHOD(CheckBalance_NoChildren_ReturnBalanced)
+	{
+		unique_ptr<BinaryTree> tree = make_unique<BinaryTree>();
+		shared_ptr<BinaryTreeNode> node = make_shared<BinaryTreeNode>("Node");
+
+		Assert::AreEqual(0, tree->checkBalance(node), L"No children should return 0 for balanced.");
+	}
+
+	TEST_METHOD(CheckBalance_OneChildLeft_ReturnBalanced)
+	{
+		unique_ptr<BinaryTree> tree = make_unique<BinaryTree>();
+		shared_ptr<BinaryTreeNode> node = make_shared<BinaryTreeNode>("Node");
+		node->left = make_shared<BinaryTreeNode>("Left");
+
+		Assert::AreEqual(0, tree->checkBalance(node), L"Only has left child should return 0 for balanced.");
+	}
+
+	TEST_METHOD(CheckBalance_OneChildRight_ReturnBalanced)
+	{
+		unique_ptr<BinaryTree> tree = make_unique<BinaryTree>();
+		shared_ptr<BinaryTreeNode> node = make_shared<BinaryTreeNode>("Node");
+		node->right = make_shared<BinaryTreeNode>("Right");
+
+		Assert::AreEqual(0, tree->checkBalance(tree->root), L"Only has right child should return 0 for balanced.");
+	}
+
+	TEST_METHOD(CheckBalance_BothChildren_ReturnBalanced)
+	{
+		unique_ptr<BinaryTree> tree = make_unique<BinaryTree>();
+		shared_ptr<BinaryTreeNode> node = make_shared<BinaryTreeNode>("Node");
+		node->left = make_shared<BinaryTreeNode>("Left");
+		node->right = make_shared<BinaryTreeNode>("Right");
+
+		Assert::AreEqual(0, tree->checkBalance(node), L"Has both children should return 0 for balanced.");
+	}
+
+	TEST_METHOD(CheckBalance_LeftHeavy_ReturnMinus)
+	{
+		unique_ptr<BinaryTree> tree = make_unique<BinaryTree>();
+		shared_ptr<BinaryTreeNode> node = make_shared<BinaryTreeNode>("Node");
+		node->left = make_shared<BinaryTreeNode>("Left");
+		node->left->left = make_shared<BinaryTreeNode>("LeftLeft");
+
+		Assert::AreEqual(0, tree->checkBalance(tree->root), L"Is left heavy, should return -2.");
+	}
+
+	TEST_METHOD(CheckBalance_RightHeavy_ReturnMinus)
+	{
+		unique_ptr<BinaryTree> tree = make_unique<BinaryTree>();
+		shared_ptr<BinaryTreeNode> node = make_shared<BinaryTreeNode>("Node");
+		node->right = make_shared<BinaryTreeNode>("Right");
+		node->right->left = make_shared<BinaryTreeNode>("LeftLeft");
+
+		Assert::AreEqual(0, tree->checkBalance(tree->root), L"Is right heavy, should return 2.");
+	}
 };
