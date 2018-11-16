@@ -58,6 +58,11 @@ public:
 	///<param name="node">Node to find it's smallest value.</param>
 	///<returns>A pair of a pointer to the minimum value node and the number of nodes it went through to find it.</returns>
 	pair<shared_ptr<BinaryTreeNode>, int> findMin(shared_ptr<BinaryTreeNode> node);
+
+	///<summary>Find a possible replacer node for the given one. 
+	///<para>The furthest maximum node from the left child or the minimum node from the right, depending on wich is further away.</para></summary>
+	///<param name="node">Node from wich to find it's furthest replacer.</param>
+	///<returns>A pointer to the node found.</returns>
 	shared_ptr<BinaryTreeNode> getFurthestReplacerNode(shared_ptr<BinaryTreeNode> node);
 
 	///<summary>Print a list of all the node values, in order.</summary>

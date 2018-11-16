@@ -3,18 +3,18 @@
 
 BinaryTreeNode::BinaryTreeNode(string value)
 {
+	if (value == "")
+		throw invalid_argument("Argument 'value' is empty. Can't create node.");
+
 	this->value = value;
 	left = nullptr;
 	right = nullptr;
 	frequency = 1;
 	depth = 1;
-
-	cout << "Node Created" << endl;
 }
 
 BinaryTreeNode::~BinaryTreeNode()
 {
-	cout << "Node Deleted: " << value << endl;
 }
 
 bool BinaryTreeNode::isLeaf()
