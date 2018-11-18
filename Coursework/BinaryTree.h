@@ -27,13 +27,13 @@ public:
 
 	///<summary>Look for the node with the specified value and remove it.</summary>
 	///<param name="value">Value of the node to remove.</param>
-	///<returns>If exists, the value of the removed node, as a string, if not found, an empty string.</returns>
-	string remove(string value);
+	///<returns>If exists, a pointer for the removed node, if not found, a null pointer.</returns>
+	shared_ptr<BinaryTreeNode> remove(string value);
 
 	///<summary>Remove the given node from the tree.</summary>
 	///<param name="node">Pointer to the node to be removed.</param>
-	///<returns>If exists, the value of the removed node, as a string, if not found, an empty string.</returns>
-	string remove(shared_ptr<BinaryTreeNode> node);
+	///<returns>If exists, a pointer for the removed node, if not found, a null pointer.</returns>
+	shared_ptr<BinaryTreeNode> remove(shared_ptr<BinaryTreeNode> node);
 
 	///<summary>Check the given node's balance, if balenced, leaft heavy or right heavy.</summary>
 	///<param name="node">Node to check the childs balance.</param>

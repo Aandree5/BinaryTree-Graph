@@ -13,15 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="UnitTesting">
+      <UniqueIdentifier>{46889de9-0375-424f-8240-654d9c8143fc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\BinaryTreeNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BinaryTreeNodeTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BinaryTreeTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\BinaryTree.cpp">
@@ -32,6 +29,12 @@
     </ClCompile>
     <ClCompile Include="..\QueueBTNode.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BinaryTreeNodeTests.cpp">
+      <Filter>UnitTesting</Filter>
+    </ClCompile>
+    <ClCompile Include="BinaryTreeTests.cpp">
+      <Filter>UnitTesting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

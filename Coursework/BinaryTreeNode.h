@@ -16,7 +16,7 @@ public:
 	///<summary>Number of times this node's <paramref name="value"/> was added to the tree.</summary>
 	int frequency;
 
-	///<summary>Distance from this node to the farthest leaf.</summary>
+	///<summary>Depth of the node, starting at the farthest leaf (1 indexed).</summary>
 	int depth;
 
 	BinaryTreeNode(string value);
@@ -29,4 +29,25 @@ public:
 	///<summary>Checks if node has only one child.</summary>
 	///<returns>A pointer to the child node if true, null pointer otherwise.</returns>
 	shared_ptr<BinaryTreeNode> hasOnlyOnechild();
+
+
+	// ### Operators ###
+	operator string() const
+	{
+		return value + " '" + to_string(frequency);
+	}
+
+	friend ostream &operator<<(ostream &os, const BinaryTreeNode &node)
+	{
+		os << node.value << " '" << to_string(node.frequency);
+
+		return os;
+	}
+
+	friend wostream &operator<<(wostream &wos, const BinaryTreeNode &node)
+	{
+		wos << node.value.c_str() << " '" << to_string(node.frequency).c_str();
+
+		return wos;
+	}
 };
