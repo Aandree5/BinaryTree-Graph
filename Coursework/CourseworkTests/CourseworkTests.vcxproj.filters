@@ -24,12 +24,6 @@
     <ClCompile Include="..\BinaryTree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\QueueBT.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\QueueBTNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BinaryTreeNodeTests.cpp">
       <Filter>UnitTesting</Filter>
     </ClCompile>

@@ -1178,5 +1178,90 @@ public:
 
 	TEST_METHOD(RemoveByNode_ValidInput_DecreasesDepth)
 	{
+		unique_ptr<BinaryTree> tree = make_unique<BinaryTree>();
+		shared_ptr<BinaryTreeNode> H = tree->insert("H");
+		shared_ptr<BinaryTreeNode> F = tree->insert("F");
+		shared_ptr<BinaryTreeNode> L = tree->insert("L");
+		shared_ptr<BinaryTreeNode> C = tree->insert("C");
+		shared_ptr<BinaryTreeNode> G = tree->insert("G");
+		shared_ptr<BinaryTreeNode> I = tree->insert("I");
+		shared_ptr<BinaryTreeNode> V = tree->insert("V");
+		shared_ptr<BinaryTreeNode> E = tree->insert("E");
+		shared_ptr<BinaryTreeNode> J = tree->insert("J");
+		shared_ptr<BinaryTreeNode> X = tree->insert("X");
+
+		/*                   H					
+						   /   \			
+						  F	    L			
+						 / \   / \			
+						C	G I   V				
+						 \     \   \			
+						  E     J   X				*/
+
+		Assert::AreEqual(4, H->depth, L"'H' depth should be 4.");
+		Assert::AreEqual(3, F->depth, L"'F' depth should be 3.");
+		Assert::AreEqual(3, L->depth, L"'L' depth should be 3.");
+		Assert::AreEqual(2, C->depth, L"'C' depth should be 2.");
+		Assert::AreEqual(1, G->depth, L"'G' depth should be 1.");
+		Assert::AreEqual(2, I->depth, L"'I' depth should be 2.");
+		Assert::AreEqual(2, V->depth, L"'V' depth should be 2.");
+		Assert::AreEqual(1, E->depth, L"'E' depth should be 1.");
+		Assert::AreEqual(1, J->depth, L"'J' depth should be 1.");
+		Assert::AreEqual(1, X->depth, L"'X' depth should be 1.");
+
+		tree->remove(E);
+
+		/*                   H
+						   /   \
+						  F	    L
+						 / \   / \
+						C	G I   V
+						       \   \
+						        J   X				*/
+
+		Assert::AreEqual(4, H->depth, L"'H' depth should be 4.");
+		Assert::AreEqual(2, F->depth, L"'F' depth should be 2.");
+		Assert::AreEqual(3, L->depth, L"'L' depth should be 3.");
+		Assert::AreEqual(1, C->depth, L"'C' depth should be 1.");
+		Assert::AreEqual(1, G->depth, L"'G' depth should be 1.");
+		Assert::AreEqual(2, I->depth, L"'I' depth should be 2.");
+		Assert::AreEqual(2, V->depth, L"'V' depth should be 2.");
+		Assert::AreEqual(1, J->depth, L"'J' depth should be 1.");
+		Assert::AreEqual(1, X->depth, L"'X' depth should be 1.");
+
+		tree->remove(L);
+
+		/*                   H
+						   /   \
+						  F	    J
+						 / \   / \
+						C	G I   V
+							       \
+								    X				*/
+
+		Assert::AreEqual(4, H->depth, L"'H' depth should be 4.");
+		Assert::AreEqual(2, F->depth, L"'F' depth should be 2.");
+		Assert::AreEqual(1, C->depth, L"'C' depth should be 1.");
+		Assert::AreEqual(1, G->depth, L"'G' depth should be 1.");
+		Assert::AreEqual(1, I->depth, L"'I' depth should be 1.");
+		Assert::AreEqual(2, V->depth, L"'V' depth should be 2.");
+		Assert::AreEqual(3, J->depth, L"'J' depth should be 3.");
+		Assert::AreEqual(1, X->depth, L"'X' depth should be 1.");
+
+		tree->remove(V);
+
+		/*                   H
+						   /   \
+						  F	    J
+						 / \   / \
+						C	G I   X				*/
+
+		Assert::AreEqual(3, H->depth, L"'H' depth should be 3.");
+		Assert::AreEqual(2, F->depth, L"'F' depth should be 2.");
+		Assert::AreEqual(1, C->depth, L"'C' depth should be 1.");
+		Assert::AreEqual(1, G->depth, L"'G' depth should be 1.");
+		Assert::AreEqual(1, I->depth, L"'I' depth should be 1.");
+		Assert::AreEqual(2, J->depth, L"'J' depth should be 2.");
+		Assert::AreEqual(1, X->depth, L"'X' depth should be 1.");
 	}
 };

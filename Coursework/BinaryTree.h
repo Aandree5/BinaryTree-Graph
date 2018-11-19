@@ -2,15 +2,20 @@
 #include <string>
 #include <iostream>
 #include <memory>
+#include <vector>
 
 using namespace std;
 
 class BinaryTreeNode;
+class QueueBT;
 
 class BinaryTree
 {
 public:
 	shared_ptr<BinaryTreeNode> root;
+	string lastChanged;
+	vector<string> tempMarked;
+
 
 	BinaryTree();
 	~BinaryTree();
@@ -74,9 +79,5 @@ public:
 	void printPostOrder(shared_ptr<BinaryTreeNode> node = nullptr);
 
 	///<summary>Print an horizontal tree of the node values.</summary>
-	///<param name="node">Pointer to the starting node, if null, starts at root.</param>
-	void print(shared_ptr<BinaryTreeNode> node = nullptr);
-
-	// NOT WORKING
-	void printTree();
+	void print();
 };

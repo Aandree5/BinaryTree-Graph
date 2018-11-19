@@ -1,7 +1,10 @@
 #include "pch.h"
 #include "BinaryTree.h"
 #include "BinaryTreeNode.h"
-#include "QueueBT.h"
+#include "Stack.h"
+#include "ConsoleHelpers.h"
+
+using namespace ConsoleHelpers;
 
 BinaryTree::BinaryTree()
 {
@@ -36,6 +39,8 @@ shared_ptr<BinaryTreeNode> BinaryTree::insert(string value)
 			}
 			else
 			{
+				tempMarked.push_back(current->value);
+
 				shared_ptr<BinaryTreeNode> &childReference = (value < current->value ? current->left : current->right);
 
 				if (!childReference)
@@ -52,6 +57,8 @@ shared_ptr<BinaryTreeNode> BinaryTree::insert(string value)
 		}
 	}
 
+	lastChanged = value;
+
 	return nodeToReturn;
 }
 
@@ -64,24 +71,46 @@ shared_ptr<BinaryTreeNode> BinaryTree::find(string value)
 
 	cout << "?(" << value << "): ";
 
-	do
+	if (!current)
 	{
-		if (!current)
-			cout << " ### NO ###" << endl;
+		printC(" ### NO ###", C_RED);
 
-		else if (current->value == value)
+		cout << endl << endl;
+	}
+
+	else
+	{
+		do
 		{
-			cout << current->value << " ### YES ###" << endl;
+			if (current->value == value)
+			{
+				cout << current->value;
 
-			break;
-		}
-		else
-		{
-			cout << current->value << " > ";
+				printC(" ### YES ###", C_GREEN);
 
-			current = (value < current->value ? current->left : current->right);
-		}
-	} while (current);
+				cout << endl << endl;
+
+				lastChanged = current->value;
+
+				break;
+			}
+			else
+			{
+				cout << current->value << " > ";
+
+				tempMarked.push_back(current->value);
+
+				current = (value < current->value ? current->left : current->right);
+
+				if (!current)
+				{
+					printC(" ### NO ###", C_RED);
+
+					cout << endl << endl;
+				}
+			}
+		} while (current);
+	}
 
 	return current;
 }
@@ -113,9 +142,16 @@ shared_ptr<BinaryTreeNode> BinaryTree::remove(shared_ptr<BinaryTreeNode> node)
 			(parent->left == node ? parent->left : parent->right) = nullptr;
 
 			balanceTree(parent);
+
+			lastChanged = parent->value;
 		}
 		else
+		{
 			root = nullptr;
+
+			lastChanged = "";
+		}
+
 	}
 	else if (shared_ptr<BinaryTreeNode> child = node->hasOnlyOnechild())
 	{
@@ -129,6 +165,8 @@ shared_ptr<BinaryTreeNode> BinaryTree::remove(shared_ptr<BinaryTreeNode> node)
 
 
 		balanceTree(child);
+
+		lastChanged = child->value;
 	}
 	else
 	{
@@ -166,6 +204,8 @@ shared_ptr<BinaryTreeNode> BinaryTree::remove(shared_ptr<BinaryTreeNode> node)
 			node->right->parent = replacerNode;
 
 		balanceTree(balanceFrom);
+
+		lastChanged = replacerNode->value;
 	}
 
 	return node;
@@ -428,93 +468,99 @@ void BinaryTree::printPostOrder(shared_ptr<BinaryTreeNode> node)
 	cout << to_string(node->frequency) << " " << node->value << endl;
 }
 
-void BinaryTree::print(shared_ptr<BinaryTreeNode> node)
+void BinaryTree::print()
 {
-	if (!node)
-		node = root;
+	if (!root)
+		cout << "Tree is empty";
 
+	Stack<BinaryTreeNode> stack = Stack<BinaryTreeNode>();
 
-	shared_ptr<BinaryTreeNode> current = root;
+	stack.push(root);
 
-	while (current != node)
+	while (!stack.isEmpty())
 	{
-		if (current->right == node || (current == node->parent.lock() && current->hasOnlyOnechild()))
-		{
-			cout << char(192) << char(196);
-			break;
-		}
-		else if (current->left == node)
-		{
-			cout << char(195) << char(196);
-			break;
-		}
-		else if (current->value > node->value  && !current->hasOnlyOnechild()) // Left child
-		{
-			cout << char(179) << "  ";
+		shared_ptr<BinaryTreeNode> current = stack.pop();
 
-			if (!current->left)
+		// FILO: Right has to go first so left will be poped first
+		if (current->right)
+			stack.push(current->right);
+
+		if (current->left)
+			stack.push(current->left);
+
+		shared_ptr<BinaryTreeNode> parent = root;
+
+		while (parent != current)
+		{
+			if (parent->right == current || (parent == current->parent.lock() && parent->hasOnlyOnechild()))
+			{
+				cout << char(192) << char(196);
+
 				break;
+			}
+			else if (parent->left == current)
+			{
+				cout << char(195) << char(196);
 
-			current = current->left;
-		}
-		else //Right child or just one child
-		{
-			cout << "   ";
-
-			if (current->right)
-				current = current->right;
-
-			else if (current->hasOnlyOnechild())
-				current = current->hasOnlyOnechild();
-
-			else
 				break;
+			}
+			else if (parent->value > current->value && !parent->hasOnlyOnechild()) // Left child
+			{
+				cout << char(179) << "  ";
+
+				if (!parent->left)
+					break;
+
+				parent = parent->left;
+			}
+			else //Right child or just one child
+			{
+				cout << "   ";
+
+				if (parent->right)
+					parent = parent->right;
+
+				else if (parent->hasOnlyOnechild())
+					parent = parent->hasOnlyOnechild();
+
+				else
+					break;
+			}
 		}
-	}
 
+		// Root doens't have parent
+		if (parent = current->parent.lock())
+			cout << " " << (current == parent->left ? "-" : "+") << "> ";
 
-	shared_ptr<BinaryTreeNode> parent = node->parent.lock();
-	if (parent = node->parent.lock())
-		cout << " " << (node == parent->left ? "-" : "+") << "> ";
+		// DEBUG SHOW NODE DEPTH
+		//cout << to_string(current->depth) << ". ";
 
-	cout << to_string(node->depth) << ". " << *node << endl;
-
-	if (node->left)
-		print(node->left);
-	if (node->right)
-		print(node->right);
-}
-
-// TODO: FINISH PRINTING TREE
-void BinaryTree::printTree()
-{
-	shared_ptr<QueueBT> queue = make_shared<QueueBT>();
-	queue->push_back(root);
-	int currDepth = root->depth + 1;
-	int childs = 1;
-
-	while (!queue->isEmpty())
-	{
-		shared_ptr<BinaryTreeNode> node = queue->pop();
-		childs--;
-
-		if (node->left)
-			queue->push_back(node->left);
-
-		if (node->right)
-			queue->push_back(node->right);
-
-		for (int i = (int)pow(2, root->depth - currDepth) * 4; i < currDepth*6; i++)
-			cout << " ";
-
-		cout << node->value;
-
-		if (!childs)
+		if (lastChanged != "" && current->value == lastChanged)
 		{
-			childs = queue->size();
-			currDepth--;
-			cout << endl;
+			printC(*current, Color::C_GREEN);
+
+
+			lastChanged = "";
+			tempMarked.clear();
 		}
+		else
+		{
+			bool printed = false;
+
+			if (lastChanged != "")
+				for (string marked : tempMarked)
+					if (current->value == marked)
+					{
+						printC(*current, Color::C_BLUE);
+						printed = true;
+						break;
+					}
+
+			if (!printed)
+				cout << *current;
+		}
+
+		cout << endl;
 	}
 
 	cout << endl;
