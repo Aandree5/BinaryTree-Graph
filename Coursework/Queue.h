@@ -7,9 +7,9 @@ template<class T>
 struct QueueItem
 {
 	shared_ptr<T> reference;
-	shared_ptr<QueueItem> next;
+	shared_ptr<QueueItem<T>> next;
 
-	QueueNode(shared_ptr<T> reference)
+	QueueItem(shared_ptr<T> reference)
 	{
 		this->reference = reference;
 		next = nullptr;
@@ -43,6 +43,11 @@ public:
 			tail = temp;
 		}
 	};
+
+	shared_ptr<QueueItem<T>> front()
+	{
+		return head;
+	}
 
 	shared_ptr<T> pop()
 	{
