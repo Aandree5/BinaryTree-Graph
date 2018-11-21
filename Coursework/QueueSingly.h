@@ -4,47 +4,34 @@
 using namespace std;
 
 template<class T>
-struct QueueItem
+class QueueSingly
 {
-	shared_ptr<T> reference;
-	shared_ptr<QueueItem<T>> next;
-
-	QueueItem(shared_ptr<T> reference)
-	{
-		this->reference = reference;
-		next = nullptr;
-	};
-};
-
-template<class T>
-class Queue
-{
-	shared_ptr<QueueItem<T>> head;
-	shared_ptr<QueueItem<T>> tail;
+	shared_ptr<SinglyItem<T>> head;
+	shared_ptr<SinglyItem<T>> tail;
 
 public:
-	Queue()
+	QueueSingly()
 	{
 		head = nullptr;
 		tail = nullptr;
 	};
 
-	void push_back(shared_ptr<T> reference)
+	void push_back(shared_ptr<T> item)
 	{
 		if (!head)
 		{
-			head = make_shared<QueueItem<T>>(reference);
+			head = make_shared<SinglyItem<T>>(item);
 			tail = head;
 		}
 		else
 		{
-			shared_ptr<QueueItem<T>> temp = make_shared<QueueItem<T>>(reference);
+			shared_ptr<SinglyItem<T>> temp = make_shared<SinglyItem<T>>(item);
 			tail->next = temp;
 			tail = temp;
 		}
 	};
 
-	shared_ptr<QueueItem<T>> front()
+	shared_ptr<SinglyItem<T>> front()
 	{
 		return head;
 	}
@@ -55,7 +42,7 @@ public:
 
 		if (head)
 		{
-			node = head->reference;
+			node = head->item;
 
 			if (head != tail)
 				head = head->next;
@@ -84,12 +71,33 @@ public:
 			return 1;
 
 		int size = 1;
-		shared_ptr<QueueItem<T>> temp = head;
+		shared_ptr<SinglyItem<T>> temp = head;
 
 		while ((temp = temp->next) != nullptr)
 			size++;
 
 		return size;
 	};
+
+	bool contains(shared_ptr<T> item)
+	{
+		shared_ptr<SinglyItem<T>> current = head;
+
+		while (current)
+		{
+			if (current->item == item)
+				break;
+
+			current = current->next;
+		}
+
+		return (bool)current;
+	}
+
+	void clear()
+	{
+		head = nullptr;
+		tail = nullptr;
+	}
 };
 

@@ -27,13 +27,19 @@
     <ClInclude Include="ConsoleHelpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Queue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Stack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="UnweightedGraph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SinglyItems.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ListSinglyRef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StackSinglyRef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QueueSingly.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

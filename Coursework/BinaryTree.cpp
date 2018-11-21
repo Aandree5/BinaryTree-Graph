@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "BinaryTree.h"
 #include "BinaryTreeNode.h"
-#include "Stack.h"
+#include "StackSinglyRef.h"
 #include "ConsoleHelpers.h"
 
 using namespace ConsoleHelpers;
@@ -473,7 +473,7 @@ void BinaryTree::print()
 	if (!root)
 		cout << "Tree is empty";
 
-	Stack<BinaryTreeNode> stack = Stack<BinaryTreeNode>();
+	StackSinglyRef<BinaryTreeNode> stack = StackSinglyRef<BinaryTreeNode>();
 
 	stack.push(root);
 

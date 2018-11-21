@@ -155,9 +155,11 @@
     <ClInclude Include="BinaryTree.h" />
     <ClInclude Include="BinaryTreeNode.h" />
     <ClInclude Include="ConsoleHelpers.h" />
-    <ClInclude Include="Queue.h" />
+    <ClInclude Include="ListSinglyRef.h" />
+    <ClInclude Include="QueueSingly.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Stack.h" />
+    <ClInclude Include="SinglyItems.h" />
+    <ClInclude Include="StackSinglyRef.h" />
     <ClInclude Include="UnweightedGraph.h" />
   </ItemGroup>
   <ItemGroup>
