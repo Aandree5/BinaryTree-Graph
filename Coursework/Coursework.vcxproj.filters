@@ -33,15 +33,6 @@
     <ClInclude Include="SinglyItems.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ListSinglyRef.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StackSinglyRef.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QueueSinglyRef.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="UnweightedGraphEdge.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -49,6 +40,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ListSingly.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QueueSingly.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StackSingly.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

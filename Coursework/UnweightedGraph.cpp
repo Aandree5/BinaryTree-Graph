@@ -76,7 +76,7 @@ bool UnweightedGraph::isPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<U
 	printC("#(" + to_string(nodeA->value) + ") <- ", C_CYAN);
 	file << "#(" << to_string(nodeA->value) << ") <- ";
 
-	QueueSinglyRef<UnweightedGraphNode> queue;
+	QueueSingly<UnweightedGraphNode> queue;
 	vector<VisitedNode> visited;
 
 	queue.push_back(nodeA);
@@ -120,7 +120,7 @@ bool UnweightedGraph::isPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<U
 	if (found)
 	{
 		shared_ptr<UnweightedGraphNode> current = nodeB;
-		StackSinglyRef<UnweightedGraphNode> path;
+		StackSingly<UnweightedGraphNode> path;
 
 		while (current != nodeA)
 		{
@@ -182,8 +182,8 @@ shared_ptr<UnweightedGraphNode> UnweightedGraph::findNode(int value)
 
 bool UnweightedGraph::isConnected()
 {
-	StackSinglyRef<UnweightedGraphNode> stack;
-	ListSinglyRef<UnweightedGraphNode> visited;
+	StackSingly<UnweightedGraphNode> stack;
+	ListSingly<UnweightedGraphNode> visited;
 
 	stack.push(root);
 
@@ -232,8 +232,8 @@ void UnweightedGraph::traversalBFS()
 	printC("#(" + to_string(root->value) + ") -> ", C_CYAN);
 	file << "#(" << to_string(root->value) << ") -> ";
 
-	QueueSinglyRef<UnweightedGraphNode> queue;
-	ListSinglyRef<UnweightedGraphNode> visited;
+	QueueSingly<UnweightedGraphNode> queue;
+	ListSingly<UnweightedGraphNode> visited;
 
 	queue.push_back(root);
 
@@ -297,8 +297,8 @@ void UnweightedGraph::traversalDFS()
 	printC("#(" + to_string(root->value) + ") -> ", C_CYAN);
 	file << "#(" << to_string(root->value) << ") -> ";
 
-	StackSinglyRef<UnweightedGraphNode> stack;
-	ListSinglyRef<UnweightedGraphNode> visited;
+	StackSingly<UnweightedGraphNode> stack;
+	ListSingly<UnweightedGraphNode> visited;
 
 	stack.push(root);
 

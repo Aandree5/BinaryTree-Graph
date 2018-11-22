@@ -5,12 +5,12 @@
 using namespace std;
 
 template<class T>
-class StackSinglyRef
+class StackSingly
 {
-	shared_ptr<SinglyRefItem<T>> stackTop;
+	shared_ptr<SinglyItem<T>> stackTop;
 
 public:
-	StackSinglyRef()
+	StackSingly()
 	{
 		stackTop = nullptr;
 	};
@@ -18,17 +18,17 @@ public:
 	void push(shared_ptr<T> reference)
 	{
 		if (!stackTop)
-			stackTop = make_shared<SinglyRefItem<T>>(reference);
+			stackTop = make_shared<SinglyItem<T>>(reference);
 
 		else
 		{
-			shared_ptr<SinglyRefItem<T>> temp = make_shared<SinglyRefItem<T>>(reference);
+			shared_ptr<SinglyItem<T>> temp = make_shared<SinglyItem<T>>(reference);
 			temp->next = stackTop;
 			stackTop = temp;
 		}
 	};
 
-	shared_ptr<SinglyRefItem<T>> top()
+	shared_ptr<SinglyItem<T>> top()
 	{
 		return stackTop;
 	}
@@ -39,7 +39,7 @@ public:
 
 		if (stackTop)
 		{
-			node = stackTop->reference.lock();
+			node = stackTop->reference;
 
 			stackTop = stackTop->next;
 		}
@@ -58,7 +58,7 @@ public:
 
 		if (stackTop)
 		{
-			shared_ptr<SinglyRefItem<T>> temp = stackTop;
+			shared_ptr<SinglyItem<T>> temp = stackTop;
 
 			while ((temp = temp->next) != nullptr)
 				size++;
@@ -69,7 +69,7 @@ public:
 
 	bool contains(shared_ptr<T> reference)
 	{
-		shared_ptr<SinglyRefItem<T>> current = stackTop;
+		shared_ptr<SinglyItem<T>> current = stackTop;
 
 		while (current)
 		{

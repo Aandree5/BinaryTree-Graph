@@ -5,9 +5,9 @@
 #include <vector>
 #include <fstream>
 #include "SinglyItems.h"
-#include "QueueSinglyRef.h"
-#include "StackSinglyRef.h"
-#include "ListSinglyRef.h"
+#include "QueueSingly.h"
+#include "StackSingly.h"
+#include "ListSingly.h"
 #include "ConsoleHelpers.h"
 #include "UnweightedGraphNode.h"
 #include "UnweightedGraphEdge.h"
