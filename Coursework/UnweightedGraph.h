@@ -57,13 +57,20 @@ public:
 	UnweightedGraph();
 
 	shared_ptr<UnweightedGraphNode> addNode(int value);
+
 	bool addEdge(int nodeA, int nodeB);
 	bool addEdge(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB);
+
 	bool isPath(int nodeA, int nodeB);
 	bool isPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB);
+
 	shared_ptr<UnweightedGraphNode> findNode(int value);
 
 	bool isConnected();
+
+	void traversalBFS();
+
+	void traversalDFS();
 
 	void print();
 };

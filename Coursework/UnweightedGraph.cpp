@@ -224,6 +224,130 @@ bool UnweightedGraph::isConnected()
 	return connected;
 }
 
+void UnweightedGraph::traversalBFS()
+{
+	ofstream file("Graph.txt");
+
+	printC("#(" + to_string(root->value) + ") -> ", C_CYAN);
+	file << "#(" << to_string(root->value) << ") -> ";
+
+	QueueSinglyRef<UnweightedGraphNode> queue;
+	ListSinglyRef<UnweightedGraphNode> visited;
+
+	queue.push_back(root);
+
+	while (!queue.isEmpty())
+	{
+		shared_ptr<UnweightedGraphNode> current = queue.pop();
+
+		if (!visited.contains(current))
+		{
+			visited.push(current);
+
+			shared_ptr<SinglyRefItem<UnweightedGraphNode>> edge = current->edges.front();
+			while (edge)
+			{
+				queue.push_back(edge->reference.lock());
+
+				edge = edge->next;
+			}
+
+			if (current != root)
+			{
+				cout << to_string(current->value);
+				file << to_string(current->value);
+
+				if (!queue.isEmpty())
+				{
+					cout << " - ";
+					file << " - ";
+				}
+			}
+		}		
+	}
+
+	shared_ptr<UnweightedGraphNode> current = root;
+	int nrNodes = 0;
+
+	while (current = current->next)
+		nrNodes++;
+
+	size_t s = visited.size();
+
+	if (nrNodes > s)
+	{
+		printC(to_string(nrNodes - s) + " missing", C_RED);
+		file << to_string(nrNodes - s) << " missing";
+	}
+
+	cout << endl << endl;
+	file << endl << endl;
+
+	file.close();
+}
+
+void UnweightedGraph::traversalDFS()
+{
+	ofstream file("Graph.txt");
+
+	printC("#(" + to_string(root->value) + ") -> ", C_CYAN);
+	file << "#(" << to_string(root->value) << ") -> ";
+
+	StackSinglyRef<UnweightedGraphNode> stack;
+	ListSinglyRef<UnweightedGraphNode> visited;
+
+	stack.push(root);
+
+	while (!stack.isEmpty())
+	{
+		shared_ptr<UnweightedGraphNode> current = stack.pop();
+
+		if (!visited.contains(current))
+		{
+			visited.push(current);
+
+			shared_ptr<SinglyRefItem<UnweightedGraphNode>> edge = current->edges.front();
+			while (edge)
+			{
+				stack.push(edge->reference.lock());
+
+				edge = edge->next;
+			}
+
+			if (current != root)
+			{
+				cout << to_string(current->value);
+				file << to_string(current->value);
+
+				if (!stack.isEmpty())
+				{
+					cout << " - ";
+					file << " - ";
+				}
+			}
+		}
+	}
+
+	shared_ptr<UnweightedGraphNode> current = root;
+	int nrNodes = 0;
+
+	while (current = current->next)
+		nrNodes++;
+
+	size_t s = visited.size();
+
+	if (nrNodes > s)
+	{
+		printC(to_string(nrNodes - s) + " missing", C_RED);
+		file << to_string(nrNodes - s) << " missing";
+	}
+
+	cout << endl << endl;
+	file << endl << endl;
+
+	file.close();
+}
+
 void UnweightedGraph::print()
 {
 	shared_ptr<UnweightedGraphNode> current = root;
