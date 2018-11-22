@@ -13,6 +13,8 @@
 #define cyan SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11)
 #define white SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15)
 #define grey SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7)
+#define brown SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6)
+#define darkgrey SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8)
 #endif // _WIN32
 
 #ifdef __linux__
@@ -25,8 +27,10 @@
 #define green cout << "\033[1;32m"
 #define yellow cout << "\033[1;33m"
 #define cyan cout << "\033[1;36m"
-#define white cout << "\033[1;37m"
+#define white cout << "\033[1;97m"
 #define grey cout << "\033[1;37m"
+#define brown cout << "\033[1;91m"
+#define darkgrey cout << "\033[1;90m"
 #endif // __linux__
 
 enum Color
@@ -37,6 +41,8 @@ enum Color
 	C_YELLOW,
 	C_CYAN,
 	C_WHITE,
+	C_BROWN,
+	C_DARKGREY,
 	C_DEFAULT
 };
 
@@ -70,6 +76,14 @@ namespace ConsoleHelpers
 
 		case C_WHITE:
 			white;
+			break;
+
+		case C_BROWN:
+			brown;
+			break;
+
+		case C_DARKGREY:
+			darkgrey;
 			break;
 
 		default:

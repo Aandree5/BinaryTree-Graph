@@ -537,7 +537,7 @@ void BinaryTree::print()
 
 		if (lastChanged != "" && current->value == lastChanged)
 		{
-			printC(*current, Color::C_GREEN);
+			printC(*current, Color::C_CYAN);
 
 
 			lastChanged = "";

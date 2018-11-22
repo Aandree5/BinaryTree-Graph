@@ -73,7 +73,7 @@ bool UnweightedGraph::isPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<U
 	ofstream file("Graph.txt");
 	bool found = false;
 
-	cout << "#(" << to_string(nodeA->value) << ") <- ";
+	printC("#(" + to_string(nodeA->value) + ") <- ", C_CYAN);
 	file << "#(" << to_string(nodeA->value) << ") <- ";
 
 	QueueSinglyRef<UnweightedGraphNode> queue;
@@ -91,30 +91,27 @@ bool UnweightedGraph::isPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<U
 
 			break;
 		}
-		else
+
+		shared_ptr<SinglyRefItem<UnweightedGraphNode>> edge = current->edges.front();
+		while (edge)
 		{
-			shared_ptr<SinglyRefItem<UnweightedGraphNode>> edge = current->edges.front();
+			shared_ptr<UnweightedGraphNode> node = edge->reference.lock();
 
-			while (edge)
-			{
-				shared_ptr<UnweightedGraphNode> node = edge->reference.lock();
-
-				bool exits = false;
-				for (VisitedNode vNode : visited)
-					if (vNode.reference.lock() == node)
-					{
-						exits = true;
-						break;
-					}
-
-				if (!exits)
+			bool exits = false;
+			for (VisitedNode vNode : visited)
+				if (vNode.reference.lock() == node)
 				{
-					queue.push_back(node);
-					visited.push_back(VisitedNode(node, current));
+					exits = true;
+					break;
 				}
 
-				edge = edge->next;
+			if (!exits)
+			{
+				queue.push_back(node);
+				visited.push_back(VisitedNode(node, current));
 			}
+
+			edge = edge->next;
 		}
 	}
 
@@ -151,18 +148,16 @@ bool UnweightedGraph::isPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<U
 				file << " - ";
 			}
 		}
-
-		cout << " -> (" << nodeB->value << ")" << endl;
-		file << " -> (" << nodeB->value << ")" << endl;
 	}
 	else
 	{
-		cout << "### No path ###" << endl;
-		file << "### No path ###" << endl;
+		printC("### No path ###", C_RED);
+		file << "### No path ###" ;
 	}
 
-	cout << endl;
-	file << endl;
+	printC(" -> (" + to_string(nodeB->value) + ")", C_CYAN);
+	cout << endl << endl;
+	file << " -> (" << nodeB->value << ")" << endl << endl;
 
 	file.close();
 

@@ -8,8 +8,10 @@
 #include "QueueSinglyRef.h"
 #include "StackSinglyRef.h"
 #include "ListSinglyRef.h"
+#include "ConsoleHelpers.h"
 
 using namespace std;
+using namespace ConsoleHelpers;
 
 struct UnweightedGraphNode : public enable_shared_from_this<UnweightedGraphNode>
 {
