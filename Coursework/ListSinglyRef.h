@@ -87,7 +87,7 @@ public:
 		{
 			shared_ptr<SinglyRefItem<T>> temp = head;
 
-			while ((temp = temp->next) != nullptr)
+			while (temp = temp->next)
 				size++;
 		}
 

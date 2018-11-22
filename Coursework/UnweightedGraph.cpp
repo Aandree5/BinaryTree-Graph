@@ -196,34 +196,31 @@ bool UnweightedGraph::isConnected()
 	{
 		shared_ptr<UnweightedGraphNode> current = stack.pop();
 
-		visited.push(current);
-
-		shared_ptr<SinglyRefItem<UnweightedGraphNode>> edge = current->edges.front();
-
-		while (edge)
+		if (!visited.contains(current))
 		{
-			shared_ptr<UnweightedGraphNode> node = edge->reference.lock();
-			if (!visited.contains(node))
-				stack.push(node);
+			visited.push(current);
 
-			edge = edge->next;
+			shared_ptr<SinglyRefItem<UnweightedGraphNode>> edge = current->edges.front();
+			while (edge)
+			{
+				stack.push(edge->reference.lock());
+
+				edge = edge->next;
+			}
 		}
 	}
 
 	shared_ptr<UnweightedGraphNode> current = root;
 	int nrNodes = 0;
 
-	while (current)
-	{
+	while (current = current->next)
 		nrNodes++;
-
-		current = current->next;
-	}
 
 	bool connected = nrNodes == visited.size();
 
 	if (connected)
 		cout << "yes" << endl;
+
 	else
 		cout << "no" << endl;
 
