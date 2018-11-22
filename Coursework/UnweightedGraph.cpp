@@ -35,16 +35,16 @@ shared_ptr<UnweightedGraphNode> UnweightedGraph::addNode(int value)
 	}
 }
 
-bool UnweightedGraph::addEdge(int nodeA, int nodeB)
+bool UnweightedGraph::addEdge(int nodeA, int nodeB, size_t weight)
 {
-	return addEdge(findNode(nodeA), findNode(nodeB));
+	return addEdge(findNode(nodeA), findNode(nodeB), weight);
 }
 
-bool UnweightedGraph::addEdge(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB)
+bool UnweightedGraph::addEdge(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB, size_t weight)
 {
 	if (nodeA && nodeB)
 	{
-		nodeA->addEdge(nodeB);
+		nodeA->addEdge(nodeB, weight);
 
 		return true;
 	}
@@ -92,10 +92,10 @@ bool UnweightedGraph::isPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<U
 			break;
 		}
 
-		shared_ptr<SinglyRefItem<UnweightedGraphNode>> edge = current->edges.front();
+		shared_ptr<SinglyItem<UnweightedGraphEdge>> edge = current->edges.front();
 		while (edge)
 		{
-			shared_ptr<UnweightedGraphNode> node = edge->reference.lock();
+			shared_ptr<UnweightedGraphNode> node = edge->reference->getToNode(current);
 
 			bool exits = false;
 			for (VisitedNode vNode : visited)
@@ -195,10 +195,10 @@ bool UnweightedGraph::isConnected()
 		{
 			visited.push(current);
 
-			shared_ptr<SinglyRefItem<UnweightedGraphNode>> edge = current->edges.front();
+			shared_ptr<SinglyItem<UnweightedGraphEdge>> edge = current->edges.front();
 			while (edge)
 			{
-				stack.push(edge->reference.lock());
+				stack.push(edge->reference->getToNode(current));
 
 				edge = edge->next;
 			}
@@ -227,6 +227,7 @@ bool UnweightedGraph::isConnected()
 void UnweightedGraph::traversalBFS()
 {
 	ofstream file("Graph.txt");
+	bool isFirst = true;
 
 	printC("#(" + to_string(root->value) + ") -> ", C_CYAN);
 	file << "#(" << to_string(root->value) << ") -> ";
@@ -244,24 +245,25 @@ void UnweightedGraph::traversalBFS()
 		{
 			visited.push(current);
 
-			shared_ptr<SinglyRefItem<UnweightedGraphNode>> edge = current->edges.front();
+			shared_ptr<SinglyItem<UnweightedGraphEdge>> edge = current->edges.front();
 			while (edge)
 			{
-				queue.push_back(edge->reference.lock());
+				queue.push_back(edge->reference->getToNode(current));
 
 				edge = edge->next;
 			}
 
 			if (current != root)
 			{
-				cout << to_string(current->value);
-				file << to_string(current->value);
-
-				if (!queue.isEmpty())
+				if (!isFirst)
 				{
 					cout << " - ";
 					file << " - ";
 				}
+				isFirst = false;
+
+				cout << to_string(current->value);
+				file << to_string(current->value);
 			}
 		}		
 	}
@@ -272,12 +274,13 @@ void UnweightedGraph::traversalBFS()
 	while (current = current->next)
 		nrNodes++;
 
-	size_t s = visited.size();
+	size_t vSize = visited.size();
 
-	if (nrNodes > s)
+	if (nrNodes > vSize)
 	{
-		printC(to_string(nrNodes - s) + " missing", C_RED);
-		file << to_string(nrNodes - s) << " missing";
+		cout << " ";
+		printC(to_string(nrNodes - vSize) + " not connected", C_RED);
+		file << " " << to_string(nrNodes - vSize) << " not connected";
 	}
 
 	cout << endl << endl;
@@ -289,6 +292,7 @@ void UnweightedGraph::traversalBFS()
 void UnweightedGraph::traversalDFS()
 {
 	ofstream file("Graph.txt");
+	bool isFirst = true;
 
 	printC("#(" + to_string(root->value) + ") -> ", C_CYAN);
 	file << "#(" << to_string(root->value) << ") -> ";
@@ -306,24 +310,25 @@ void UnweightedGraph::traversalDFS()
 		{
 			visited.push(current);
 
-			shared_ptr<SinglyRefItem<UnweightedGraphNode>> edge = current->edges.front();
+			shared_ptr<SinglyItem<UnweightedGraphEdge>> edge = current->edges.front();
 			while (edge)
 			{
-				stack.push(edge->reference.lock());
+				stack.push(edge->reference->getToNode(current));
 
 				edge = edge->next;
 			}
 
 			if (current != root)
 			{
-				cout << to_string(current->value);
-				file << to_string(current->value);
-
-				if (!stack.isEmpty())
+				if (!isFirst)
 				{
 					cout << " - ";
 					file << " - ";
 				}
+				isFirst = false;
+
+				cout << to_string(current->value);
+				file << to_string(current->value);
 			}
 		}
 	}
@@ -334,12 +339,13 @@ void UnweightedGraph::traversalDFS()
 	while (current = current->next)
 		nrNodes++;
 
-	size_t s = visited.size();
+	size_t vSize = visited.size();
 
-	if (nrNodes > s)
+	if (nrNodes > vSize)
 	{
-		printC(to_string(nrNodes - s) + " missing", C_RED);
-		file << to_string(nrNodes - s) << " missing";
+		cout << " ";
+		printC(to_string(nrNodes - vSize) + " not connected", C_RED);
+		file << " " << to_string(nrNodes - vSize) << " not connected";
 	}
 
 	cout << endl << endl;
@@ -355,10 +361,10 @@ void UnweightedGraph::print()
 	do {
 		cout << current->value << " -> ";
 
-		shared_ptr<SinglyRefItem<UnweightedGraphNode>> edge = current->edges.front();
+		shared_ptr<SinglyItem<UnweightedGraphEdge>> edge = current->edges.front();
 		while (edge)
 		{
-			cout << edge->reference.lock()->value;
+			cout << edge->reference->getToNode(current)->value << " '" << to_string(edge->reference->weight);
 
 			if (edge = edge->next)
 				cout << ", ";

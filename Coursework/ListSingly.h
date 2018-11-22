@@ -5,12 +5,12 @@
 using namespace std;
 
 template<class T>
-class ListSinglyRef
+class ListSingly
 {
-	shared_ptr<SinglyRefItem<T>> head;
+	shared_ptr<SinglyItem<T>> head;
 
 public:
-	ListSinglyRef()
+	ListSingly()
 	{
 		head = nullptr;
 	};
@@ -18,17 +18,17 @@ public:
 	void push(shared_ptr<T> reference)
 	{
 		if (!head)
-			head = make_shared<SinglyRefItem<T>>(reference);
+			head = make_shared<SinglyItem<T>>(reference);
 
 		else
 		{
-			shared_ptr<SinglyRefItem<T>> temp = make_shared<SinglyRefItem<T>>(reference);
+			shared_ptr<SinglyItem<T>> temp = make_shared<SinglyItem<T>>(reference);
 			temp->next = head;
 			head = temp;
 		}
 	};
 
-	shared_ptr<SinglyRefItem<T>> front()
+	shared_ptr<SinglyItem<T>> front()
 	{
 		return head;
 	}
@@ -54,7 +54,7 @@ public:
 
 		else
 		{
-			shared_ptr<SinglyRefItem<T>> current = head;
+			shared_ptr<SinglyItem<T>> current = head;
 
 			while (current->next)
 			{
@@ -86,7 +86,7 @@ public:
 
 		if (head)
 		{
-			shared_ptr<SinglyRefItem<T>> temp = head;
+			shared_ptr<SinglyItem<T>> temp = head;
 
 			while (temp = temp->next)
 				size++;
@@ -97,7 +97,7 @@ public:
 
 	bool contains(shared_ptr<T> reference)
 	{
-		shared_ptr<SinglyRefItem<T>> current = head;
+		shared_ptr<SinglyItem<T>> current = head;
 
 		while (current)
 		{

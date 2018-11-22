@@ -9,33 +9,11 @@
 #include "StackSinglyRef.h"
 #include "ListSinglyRef.h"
 #include "ConsoleHelpers.h"
+#include "UnweightedGraphNode.h"
+#include "UnweightedGraphEdge.h"
 
 using namespace std;
 using namespace ConsoleHelpers;
-
-struct UnweightedGraphNode : public enable_shared_from_this<UnweightedGraphNode>
-{
-	unsigned value;
-	ListSinglyRef<UnweightedGraphNode> edges;
-	shared_ptr<UnweightedGraphNode> next;
-
-	UnweightedGraphNode(int value)
-	{
-		this->value = value;
-	}
-
-	int addEdge(shared_ptr<UnweightedGraphNode> toNode)
-	{
-		if (!edges.contains(toNode))
-		{
-			edges.push(toNode);
-
-			toNode->edges.push(shared_from_this());
-		}
-
-		return edges.size();
-	}
-};
 
 struct VisitedNode
 {
@@ -58,8 +36,8 @@ public:
 
 	shared_ptr<UnweightedGraphNode> addNode(int value);
 
-	bool addEdge(int nodeA, int nodeB);
-	bool addEdge(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB);
+	bool addEdge(int nodeA, int nodeB, size_t weight);
+	bool addEdge(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB, size_t weight);
 
 	bool isPath(int nodeA, int nodeB);
 	bool isPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB);

@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include "SinglyItems.h"
 
 using namespace std;
 
