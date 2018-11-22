@@ -156,7 +156,7 @@
     <ClInclude Include="BinaryTreeNode.h" />
     <ClInclude Include="ConsoleHelpers.h" />
     <ClInclude Include="ListSinglyRef.h" />
-    <ClInclude Include="QueueSingly.h" />
+    <ClInclude Include="QueueSinglyRef.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="SinglyItems.h" />
     <ClInclude Include="StackSinglyRef.h" />
@@ -177,6 +177,7 @@
   <ItemGroup>
     <Text Include="text-backup.txt" />
     <Text Include="text.txt" />
+    <Text Include="Graph.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -4,34 +4,34 @@
 using namespace std;
 
 template<class T>
-class QueueSingly
+class QueueSinglyRef
 {
-	shared_ptr<SinglyItem<T>> head;
-	shared_ptr<SinglyItem<T>> tail;
+	shared_ptr<SinglyRefItem<T>> head;
+	shared_ptr<SinglyRefItem<T>> tail;
 
 public:
-	QueueSingly()
+	QueueSinglyRef()
 	{
 		head = nullptr;
 		tail = nullptr;
 	};
 
-	void push_back(shared_ptr<T> item)
+	void push_back(shared_ptr<T> reference)
 	{
 		if (!head)
 		{
-			head = make_shared<SinglyItem<T>>(item);
+			head = make_shared<SinglyRefItem<T>>(reference);
 			tail = head;
 		}
 		else
 		{
-			shared_ptr<SinglyItem<T>> temp = make_shared<SinglyItem<T>>(item);
+			shared_ptr<SinglyRefItem<T>> temp = make_shared<SinglyRefItem<T>>(reference);
 			tail->next = temp;
 			tail = temp;
 		}
 	};
 
-	shared_ptr<SinglyItem<T>> front()
+	shared_ptr<SinglyRefItem<T>> front()
 	{
 		return head;
 	}
@@ -42,7 +42,7 @@ public:
 
 		if (head)
 		{
-			node = head->item;
+			node = head->reference.lock();
 
 			if (head != tail)
 				head = head->next;
@@ -71,7 +71,7 @@ public:
 			return 1;
 
 		int size = 1;
-		shared_ptr<SinglyItem<T>> temp = head;
+		shared_ptr<SinglyRefItem<T>> temp = head;
 
 		while ((temp = temp->next) != nullptr)
 			size++;
@@ -79,13 +79,13 @@ public:
 		return size;
 	};
 
-	bool contains(shared_ptr<T> item)
+	bool contains(shared_ptr<T> reference)
 	{
-		shared_ptr<SinglyItem<T>> current = head;
+		shared_ptr<SinglyRefItem<T>> current = head;
 
 		while (current)
 		{
-			if (current->item == item)
+			if (current->reference == reference)
 				break;
 
 			current = current->next;

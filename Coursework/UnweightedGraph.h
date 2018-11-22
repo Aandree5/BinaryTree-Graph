@@ -3,8 +3,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
 #include "SinglyItems.h"
-#include "QueueSingly.h"
+#include "QueueSinglyRef.h"
 #include "StackSinglyRef.h"
 #include "ListSinglyRef.h"
 
@@ -14,17 +15,11 @@ struct UnweightedGraphNode : public enable_shared_from_this<UnweightedGraphNode>
 {
 	unsigned value;
 	ListSinglyRef<UnweightedGraphNode> edges;
+	shared_ptr<UnweightedGraphNode> next;
 
 	UnweightedGraphNode(int value)
 	{
 		this->value = value;
-
-		cout << "Node Created" << endl;
-	}
-
-	~UnweightedGraphNode()
-	{
-		cout << "Node Deleted" << endl;
 	}
 
 	int addEdge(shared_ptr<UnweightedGraphNode> toNode)
@@ -54,15 +49,19 @@ struct VisitedNode
 
 class UnweightedGraph
 {
-	QueueSingly<UnweightedGraphNode> nodes;
+	shared_ptr<UnweightedGraphNode> root;
 
 public:
 	UnweightedGraph();
-	~UnweightedGraph();
 
 	shared_ptr<UnweightedGraphNode> addNode(int value);
-	bool contains(int value);
-	bool isPath(shared_ptr<UnweightedGraphNode> fromNode, shared_ptr<UnweightedGraphNode> toNode);
+	bool addEdge(int nodeA, int nodeB);
+	bool addEdge(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB);
+	bool isPath(int nodeA, int nodeB);
+	bool isPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB);
+	shared_ptr<UnweightedGraphNode> findNode(int value);
+
+	bool isConnected();
 
 	void print();
 };

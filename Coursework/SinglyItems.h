@@ -15,16 +15,3 @@ struct SinglyRefItem
 		next = nullptr;
 	};
 };
-
-template<class T>
-struct SinglyItem
-{
-	shared_ptr<T> item;
-	shared_ptr<SinglyItem<T>> next;
-
-	SinglyItem(shared_ptr<T> item)
-	{
-		this->item = item;
-		next = nullptr;
-	};
-};

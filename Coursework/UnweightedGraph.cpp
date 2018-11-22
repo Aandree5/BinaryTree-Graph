@@ -3,63 +3,89 @@
 
 UnweightedGraph::UnweightedGraph()
 {
-	cout << "Graph Created" << endl;
-}
-
-
-UnweightedGraph::~UnweightedGraph()
-{
-	cout << "Graph Deleted" << endl;
+	root = nullptr;
 }
 
 shared_ptr<UnweightedGraphNode> UnweightedGraph::addNode(int value)
 {
-	shared_ptr<UnweightedGraphNode> node = nullptr;
-
-	if (!contains(value))
+	if (!root)
 	{
-		node = make_shared<UnweightedGraphNode>(value);
-		nodes.push_back(node);
+		root = make_shared<UnweightedGraphNode>(value);
+
+		return root;
 	}
-
-	return node;
-}
-
-bool UnweightedGraph::contains(int value)
-{
-	shared_ptr<SinglyItem<UnweightedGraphNode>> current = nodes.front();
-	bool found = false;
-
-	while (current)
+	else
 	{
-		if (current->item->value == value)
+		shared_ptr<UnweightedGraphNode> current = root;
+
+		if (current->value == value)
+			return nullptr;
+
+		while (current->next)
 		{
-			found = true;
-			break;
+			if (current->next->value == value)
+				return nullptr;
+
+			current = current->next;
 		}
 
-		current = current->next;
-	}
+		current->next = make_shared<UnweightedGraphNode>(value);
 
-	return found;
+		return current->next;
+	}
 }
 
-bool UnweightedGraph::isPath(shared_ptr<UnweightedGraphNode> fromNode, shared_ptr<UnweightedGraphNode> toNode)
+bool UnweightedGraph::addEdge(int nodeA, int nodeB)
 {
+	return addEdge(findNode(nodeA), findNode(nodeB));
+}
+
+bool UnweightedGraph::addEdge(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB)
+{
+	if (nodeA && nodeB)
+	{
+		nodeA->addEdge(nodeB);
+
+		return true;
+	}
+
+	return false;
+}
+
+bool UnweightedGraph::isPath(int nodeA, int nodeB)
+{
+	shared_ptr<UnweightedGraphNode> nA = findNode(nodeA);
+	shared_ptr<UnweightedGraphNode> nB = findNode(nodeB);
+
+	if (nA && nB)
+		return isPath(nA, nB);
+	else if (!nA)
+		cout << "Node: " << to_string(nodeA) << " wasn't found." << endl;
+	else
+		cout << "Node: " << to_string(nodeB) << " wasn't found." << endl;
+}
+
+bool UnweightedGraph::isPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB)
+{
+	if (!nodeA || !nodeB)
+		throw invalid_argument("'nodeA' and 'nodeB' can't be null.");
+
+	ofstream file("Graph.txt");
 	bool found = false;
 
-	cout << "#(" << to_string(fromNode->value) << ") <- " ;
+	cout << "#(" << to_string(nodeA->value) << ") <- ";
+	file << "#(" << to_string(nodeA->value) << ") <- ";
 
-	QueueSingly<UnweightedGraphNode> queue;
+	QueueSinglyRef<UnweightedGraphNode> queue;
 	vector<VisitedNode> visited;
 
-	queue.push_back(fromNode);
+	queue.push_back(nodeA);
 
 	while (!queue.isEmpty())
 	{
 		shared_ptr<UnweightedGraphNode> current = queue.pop();
 
-		if (current == toNode)
+		if (current == nodeB)
 		{
 			found = true;
 
@@ -96,15 +122,15 @@ bool UnweightedGraph::isPath(shared_ptr<UnweightedGraphNode> fromNode, shared_pt
 
 	if (found)
 	{
-		shared_ptr<UnweightedGraphNode> current = toNode;
+		shared_ptr<UnweightedGraphNode> current = nodeB;
 		StackSinglyRef<UnweightedGraphNode> path;
 
-		while (current != fromNode)
+		while (current != nodeA)
 		{
 			for (VisitedNode vNode : visited)
 				if (vNode.reference.lock() == current)
 				{
-					if (current != toNode)
+					if (current != nodeB)
 						path.push(current);
 
 					current = vNode.fromRef.lock();
@@ -117,41 +143,112 @@ bool UnweightedGraph::isPath(shared_ptr<UnweightedGraphNode> fromNode, shared_pt
 		{
 			shared_ptr<UnweightedGraphNode> node = path.pop();
 			cout << to_string(node->value);
+			file << to_string(node->value);
 
 			if (!path.isEmpty())
+			{
 				cout << " - ";
+				file << " - ";
+			}
 		}
 
-		cout << " -> (" << toNode->value << ")" << endl;
+		cout << " -> (" << nodeB->value << ")" << endl;
+		file << " -> (" << nodeB->value << ")" << endl;
 	}
 	else
+	{
 		cout << "### No path ###" << endl;
+		file << "### No path ###" << endl;
+	}
 
+	cout << endl;
+	file << endl;
+
+	file.close();
 
 	return found;
 }
 
-void UnweightedGraph::print()
+shared_ptr<UnweightedGraphNode> UnweightedGraph::findNode(int value)
 {
-	if (!nodes.isEmpty())
+	if (root)
 	{
-		shared_ptr<SinglyItem<UnweightedGraphNode>> current = nodes.front();
+		shared_ptr<UnweightedGraphNode> current = root;
 
-		while (current)
+		do {
+			if (current->value == value)
+				return current;
+
+		} while (current = current->next);
+	}
+
+	return nullptr;
+}
+
+bool UnweightedGraph::isConnected()
+{
+	StackSinglyRef<UnweightedGraphNode> stack;
+	ListSinglyRef<UnweightedGraphNode> visited;
+
+	stack.push(root);
+
+	while (!stack.isEmpty())
+	{
+		shared_ptr<UnweightedGraphNode> current = stack.pop();
+
+		visited.push(current);
+
+		shared_ptr<SinglyRefItem<UnweightedGraphNode>> edge = current->edges.front();
+
+		while (edge)
 		{
-			cout << current->item->value << " -> ";
+			shared_ptr<UnweightedGraphNode> node = edge->reference.lock();
+			if (!visited.contains(node))
+				stack.push(node);
 
-			shared_ptr<SinglyRefItem<UnweightedGraphNode>> edge = current->item->edges.front();
-			while (edge)
-			{
-				cout << edge->reference.lock()->value << ", ";
-				
-				edge = edge->next;
-			}
-
-			cout << endl;
-
-			current = current->next;
+			edge = edge->next;
 		}
 	}
+
+	shared_ptr<UnweightedGraphNode> current = root;
+	int nrNodes = 0;
+
+	while (current)
+	{
+		nrNodes++;
+
+		current = current->next;
+	}
+
+	bool connected = nrNodes == visited.size();
+
+	if (connected)
+		cout << "yes" << endl;
+	else
+		cout << "no" << endl;
+
+	cout << endl;
+
+	return connected;
+}
+
+void UnweightedGraph::print()
+{
+	shared_ptr<UnweightedGraphNode> current = root;
+
+	do {
+		cout << current->value << " -> ";
+
+		shared_ptr<SinglyRefItem<UnweightedGraphNode>> edge = current->edges.front();
+		while (edge)
+		{
+			cout << edge->reference.lock()->value;
+
+			if (edge = edge->next)
+				cout << ", ";
+		}
+
+		cout << endl;
+
+	} while (current = current->next);
 }
