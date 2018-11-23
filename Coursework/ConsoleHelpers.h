@@ -15,6 +15,7 @@
 #define grey SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7)
 #define brown SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6)
 #define darkgrey SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8)
+#define darkred SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4)
 #endif // _WIN32
 
 #ifdef __linux__
@@ -31,6 +32,7 @@
 #define grey cout << "\033[1;37m"
 #define brown cout << "\033[1;91m"
 #define darkgrey cout << "\033[1;90m"
+#define darkred cout << "\033[0;31m"
 #endif // __linux__
 
 enum Color
@@ -43,6 +45,7 @@ enum Color
 	C_WHITE,
 	C_BROWN,
 	C_DARKGREY,
+	C_DARKRED,
 	C_DEFAULT
 };
 
@@ -86,6 +89,10 @@ namespace ConsoleHelpers
 			darkgrey;
 			break;
 
+		case C_DARKRED:
+			darkred;
+			break;
+
 		default:
 			grey;
 			return false;
@@ -106,5 +113,14 @@ namespace ConsoleHelpers
 		// Return color to default
 		if (needsReset)
 			grey;
+	}
+
+	void static printTitle(string title)
+	{
+		cout << endl;
+
+		printC("</ ", C_WHITE);
+		printC(title, C_RED);
+		printC(" >", C_WHITE);
 	}
 };

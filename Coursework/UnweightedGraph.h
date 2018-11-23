@@ -16,15 +16,23 @@
 using namespace std;
 using namespace ConsoleHelpers;
 
-struct VisitedNode
+struct DijkstraItem
 {
-	weak_ptr<UnweightedGraphNode> reference;
 	weak_ptr<UnweightedGraphNode> fromRef;
+	size_t cost;
+	bool visited;
 
-	VisitedNode(shared_ptr<UnweightedGraphNode> reference, shared_ptr<UnweightedGraphNode> fromRef)
+	DijkstraItem()
 	{
-		this->reference = reference;
+		this->cost = 0;
+		visited = false;
+	}
+
+	DijkstraItem(shared_ptr<UnweightedGraphNode> fromRef, size_t cost)
+	{
 		this->fromRef = fromRef;
+		this->cost = cost;
+		visited = false;
 	}
 };
 
@@ -35,21 +43,21 @@ class UnweightedGraph
 public:
 	UnweightedGraph();
 
-	shared_ptr<UnweightedGraphNode> addNode(int value);
+	shared_ptr<UnweightedGraphNode> addNode(size_t value);
 
-	bool addEdge(int nodeA, int nodeB, size_t weight);
+	bool addEdge(size_t nodeA, size_t nodeB, size_t weight);
 	bool addEdge(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB, size_t weight);
 
 	size_t countNodes();
 
-	bool isPath(int nodeA, int nodeB);
+	bool isPath(size_t nodeA, size_t nodeB);
 	bool isPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB);
 
-	shared_ptr<UnweightedGraphNode> findNode(int value);
+	shared_ptr<UnweightedGraphNode> findNode(size_t value);
 
 	bool isConnected();
 
-	bool dijkstraPath(int nodeA, int nodeB);
+	bool dijkstraPath(size_t nodeA, size_t nodeB);
 	bool dijkstraPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB);
 
 	void traversalBFS();
