@@ -39,6 +39,8 @@ public:
 	bool addEdge(int nodeA, int nodeB, size_t weight);
 	bool addEdge(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB, size_t weight);
 
+	size_t countNodes();
+
 	bool isPath(int nodeA, int nodeB);
 	bool isPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB);
 

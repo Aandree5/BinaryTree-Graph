@@ -52,6 +52,17 @@ bool UnweightedGraph::addEdge(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<
 	return false;
 }
 
+size_t UnweightedGraph::countNodes()
+{
+	shared_ptr<UnweightedGraphNode> current = root;
+	size_t nrNodes = 0;
+
+	while (current = current->next)
+		nrNodes++;
+
+	return nrNodes;
+}
+
 bool UnweightedGraph::isPath(int nodeA, int nodeB)
 {
 	shared_ptr<UnweightedGraphNode> nA = findNode(nodeA);
@@ -208,13 +219,7 @@ bool UnweightedGraph::isConnected()
 		}
 	}
 
-	shared_ptr<UnweightedGraphNode> current = root;
-	int nrNodes = 0;
-
-	while (current = current->next)
-		nrNodes++;
-
-	bool connected = nrNodes == visited.size();
+	bool connected = countNodes() == visited.size();
 
 	if (connected)
 		cout << "yes" << endl;
@@ -248,12 +253,14 @@ struct DijkstraItem
 	weak_ptr<UnweightedGraphNode> reference;
 	weak_ptr<UnweightedGraphNode> fromRef;
 	size_t cost;
+	bool visited;
 
 	DijkstraItem(shared_ptr<UnweightedGraphNode> reference, shared_ptr<UnweightedGraphNode> fromRef, size_t cost)
 	{
 		this->reference = reference;
 		this->fromRef = fromRef;
 		this->cost = cost;
+		visited = false;
 	}
 };
 
@@ -261,6 +268,8 @@ bool UnweightedGraph::dijkstraPath(shared_ptr<UnweightedGraphNode> nodeA, shared
 {
 	ListSingly<DijkstraItem> nodes;
 	bool found = false;
+
+	printC("$(" + to_string(nodeA->value) + ") <- ", C_CYAN);
 
 	shared_ptr<UnweightedGraphNode> temp = root;
 	do {
@@ -278,8 +287,12 @@ bool UnweightedGraph::dijkstraPath(shared_ptr<UnweightedGraphNode> nodeA, shared
 		}
 	} while (c = c->next);
 
+	current->reference->cost = 0;
+
 	while (current->reference->reference.lock() != nodeB)
 	{
+		current->reference->visited = true;
+
 		shared_ptr<SinglyItem<UnweightedGraphEdge>> edge = current->reference->reference.lock()->edges.front();
 		do
 		{
@@ -289,7 +302,10 @@ bool UnweightedGraph::dijkstraPath(shared_ptr<UnweightedGraphNode> nodeA, shared
 				if (n->reference->reference.lock() == edge->reference->getToNode(current->reference->reference.lock()))
 				{
 					if (edge->reference->weight + current->reference->cost < n->reference->cost)
+					{
 						n->reference->cost = edge->reference->weight + current->reference->cost;
+						n->reference->fromRef = current->reference->reference.lock();
+					}
 
 					break;
 				}
@@ -297,21 +313,65 @@ bool UnweightedGraph::dijkstraPath(shared_ptr<UnweightedGraphNode> nodeA, shared
 		} while (edge = edge->next);
 
 		current = nodes.front();
-		shared_ptr<SinglyItem<DijkstraItem>> n = current->next;
+		shared_ptr<SinglyItem<DijkstraItem>> c = current->next;
 		do
 		{
-			if (n->reference->cost < current->reference->cost)
-				current = n;
-		} while (n = n->next);
+			if (c->reference->cost < current->reference->cost && !c->reference->visited)
+				current = c;
+		} while (c = c->next);
 
-		if (current->reference->reference.lock() == nodeB)
+		if (current->reference->reference.lock() == nodeB && current->reference->fromRef.lock())
 			found = true;
 	}
 
 	if (found) 
 	{
-		cout << "found" << endl << endl;
+		size_t totalCost = 0;
+		StackSingly<UnweightedGraphNode> stack;
+
+		shared_ptr<UnweightedGraphNode> nodeToFind = nodeB;
+		shared_ptr<SinglyItem<DijkstraItem>> n = nodes.front();
+
+		while (nodeToFind != nodeA)
+		{
+			if (n->reference->reference.lock() == nodeToFind)
+			{
+
+				if (n->reference->reference.lock() == nodeB)
+					totalCost = n->reference->cost;
+
+				if (n->reference->fromRef.lock() != nodeA)
+					stack.push(n->reference->fromRef.lock());
+
+
+				nodeToFind = n->reference->fromRef.lock();
+			}
+
+			if (!(n = n->next))
+				n = nodes.front();
+		};
+
+		while(!stack.isEmpty())
+		{
+			shared_ptr<UnweightedGraphNode> nodeToPrint = stack.pop();
+
+			cout << to_string(nodeToPrint->value);
+			
+			if (!stack.isEmpty())
+				cout << " - ";
+		}
+
+
+		printC(" -> (" + to_string(nodeB->value) + ")", C_CYAN);
+		printC(" [" + to_string(totalCost) + "]", C_BROWN);
 	}
+	else
+	{
+		printC("### No path ###", C_RED);
+		printC(" -> (" + to_string(nodeB->value) + ")", C_CYAN);
+	}
+
+	cout << endl << endl;
 
 	return found;
 }
