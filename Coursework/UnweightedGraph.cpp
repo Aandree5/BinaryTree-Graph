@@ -250,14 +250,18 @@ bool UnweightedGraph::dijkstraPath(int nodeA, int nodeB)
 
 struct DijkstraItem
 {
-	weak_ptr<UnweightedGraphNode> reference;
 	weak_ptr<UnweightedGraphNode> fromRef;
 	size_t cost;
 	bool visited;
 
-	DijkstraItem(shared_ptr<UnweightedGraphNode> reference, shared_ptr<UnweightedGraphNode> fromRef, size_t cost)
+	DijkstraItem()
 	{
-		this->reference = reference;
+		this->cost = 0;
+		visited = false;
+	}
+
+	DijkstraItem(shared_ptr<UnweightedGraphNode> fromRef, size_t cost)
+	{
 		this->fromRef = fromRef;
 		this->cost = cost;
 		visited = false;
@@ -266,90 +270,57 @@ struct DijkstraItem
 
 bool UnweightedGraph::dijkstraPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB)
 {
-	ListSingly<DijkstraItem> nodes;
+	map<shared_ptr<UnweightedGraphNode>, DijkstraItem> nodes;
 	bool found = false;
 
 	printC("$(" + to_string(nodeA->value) + ") <- ", C_CYAN);
 
 	shared_ptr<UnweightedGraphNode> temp = root;
 	do {
-		nodes.push(make_shared<DijkstraItem>(temp, nullptr, UINT64_MAX));
+		nodes[temp] = DijkstraItem(nullptr, UINT64_MAX);
 	} while (temp = temp->next);
 
-	shared_ptr<SinglyItem<DijkstraItem>> current = nodes.front();
-	shared_ptr<SinglyItem<DijkstraItem>> c = current->next;
-	do
+	shared_ptr<UnweightedGraphNode> current = nodeA;
+	nodes[current].cost = 0;
+
+	while (current != nodeB)
 	{
-		if (c->reference->reference.lock() == nodeA)
-		{
-			current = c;
-			break;
-		}
-	} while (c = c->next);
+		nodes[current].visited = true;
 
-	current->reference->cost = 0;
-
-	while (current->reference->reference.lock() != nodeB)
-	{
-		current->reference->visited = true;
-
-		shared_ptr<SinglyItem<UnweightedGraphEdge>> edge = current->reference->reference.lock()->edges.front();
+		shared_ptr<SinglyItem<UnweightedGraphEdge>> edge = current->edges.front();
 		do
 		{
-			shared_ptr<SinglyItem<DijkstraItem>> n = nodes.front();
-			do
+			shared_ptr<UnweightedGraphNode> toNode = edge->reference->getToNode(current);
+			if (edge->reference->weight + nodes[current].cost < nodes[toNode].cost)
 			{
-				if (n->reference->reference.lock() == edge->reference->getToNode(current->reference->reference.lock()))
-				{
-					if (edge->reference->weight + current->reference->cost < n->reference->cost)
-					{
-						n->reference->cost = edge->reference->weight + current->reference->cost;
-						n->reference->fromRef = current->reference->reference.lock();
-					}
-
-					break;
-				}
-			} while (n = n->next);
+				nodes[toNode].cost = edge->reference->weight + nodes[current].cost;
+				nodes[toNode].fromRef = current;
+			}
 		} while (edge = edge->next);
 
-		current = nodes.front();
-		shared_ptr<SinglyItem<DijkstraItem>> c = current->next;
-		do
-		{
-			if (c->reference->cost < current->reference->cost && !c->reference->visited)
-				current = c;
-		} while (c = c->next);
 
-		if (current->reference->reference.lock() == nodeB && current->reference->fromRef.lock())
+
+		for (pair<shared_ptr<UnweightedGraphNode>, DijkstraItem> n : nodes)
+		{
+			if (n.second.cost < nodes[current].cost && !n.second.visited || nodes[current].visited)
+				current = n.first;
+		}
+
+		if (current == nodeB && nodes[current].fromRef.lock())
 			found = true;
 	}
 
 	if (found) 
 	{
-		size_t totalCost = 0;
 		StackSingly<UnweightedGraphNode> stack;
-
-		shared_ptr<UnweightedGraphNode> nodeToFind = nodeB;
-		shared_ptr<SinglyItem<DijkstraItem>> n = nodes.front();
+		shared_ptr<UnweightedGraphNode> nodeToFind = nodes[nodeB].fromRef.lock();
 
 		while (nodeToFind != nodeA)
 		{
-			if (n->reference->reference.lock() == nodeToFind)
-			{
+			stack.push(nodeToFind);
 
-				if (n->reference->reference.lock() == nodeB)
-					totalCost = n->reference->cost;
-
-				if (n->reference->fromRef.lock() != nodeA)
-					stack.push(n->reference->fromRef.lock());
-
-
-				nodeToFind = n->reference->fromRef.lock();
-			}
-
-			if (!(n = n->next))
-				n = nodes.front();
-		};
+			nodeToFind = nodes[nodeToFind].fromRef.lock();
+		}
 
 		while(!stack.isEmpty())
 		{
@@ -363,7 +334,7 @@ bool UnweightedGraph::dijkstraPath(shared_ptr<UnweightedGraphNode> nodeA, shared
 
 
 		printC(" -> (" + to_string(nodeB->value) + ")", C_CYAN);
-		printC(" [" + to_string(totalCost) + "]", C_BROWN);
+		printC(" [" + to_string(nodes[nodeB].cost) + "]", C_BROWN);
 	}
 	else
 	{
@@ -511,12 +482,13 @@ void UnweightedGraph::print()
 	shared_ptr<UnweightedGraphNode> current = root;
 
 	do {
-		cout << current->value << " -> ";
+		printC(to_string(current->value) + " -> ", C_WHITE);
 
 		shared_ptr<SinglyItem<UnweightedGraphEdge>> edge = current->edges.front();
 		while (edge)
 		{
-			cout << edge->reference->getToNode(current)->value << " '" << to_string(edge->reference->weight);
+			printC(to_string(edge->reference->getToNode(current)->value), C_WHITE);
+			cout << " '" << to_string(edge->reference->weight);
 
 			if (edge = edge->next)
 				cout << ", ";
