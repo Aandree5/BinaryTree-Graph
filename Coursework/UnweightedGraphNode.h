@@ -14,8 +14,8 @@ public:
 	ListSingly<UnweightedGraphEdge> edges;
 	shared_ptr<UnweightedGraphNode> next;
 
-	UnweightedGraphNode(int value);
+	UnweightedGraphNode(size_t value);
 
-	int addEdge(shared_ptr<UnweightedGraphNode> toNode, size_t weight);
+	size_t addEdge(shared_ptr<UnweightedGraphNode> toNode, size_t weight);
 };
 

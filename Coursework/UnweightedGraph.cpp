@@ -355,11 +355,7 @@ void UnweightedGraph::traversalBFS()
 		}		
 	}
 
-	shared_ptr<UnweightedGraphNode> current = root;
-	int nrNodes = 0;
-
-	while (current = current->next)
-		nrNodes++;
+	size_t nrNodes = countNodes();
 
 	size_t vSize = visited.size();
 
@@ -420,11 +416,7 @@ void UnweightedGraph::traversalDFS()
 		}
 	}
 
-	shared_ptr<UnweightedGraphNode> current = root;
-	int nrNodes = 0;
-
-	while (current = current->next)
-		nrNodes++;
+	size_t nrNodes = countNodes();
 
 	size_t vSize = visited.size();
 

@@ -18,7 +18,6 @@ public:
 
 
 	BinaryTree();
-	~BinaryTree();
 
 	///<summary>Add a new value into the tree.</summary>
 	///<param name="value">Value of the new node to add.</param>

@@ -11,9 +11,6 @@ BinaryTree::BinaryTree()
 	root = nullptr;
 }
 
-BinaryTree::~BinaryTree()
-{
-}
 
 shared_ptr<BinaryTreeNode> BinaryTree::insert(string value)
 {
@@ -69,7 +66,7 @@ shared_ptr<BinaryTreeNode> BinaryTree::find(string value)
 
 	shared_ptr<BinaryTreeNode> current = root;
 
-	cout << "?(" << value << "): ";
+	printC("?(" + value + "): ", C_CYAN);
 
 	if (!current)
 	{

@@ -2,12 +2,12 @@
 #include "UnweightedGraphNode.h"
 #include "UnweightedGraphEdge.h"
 
-UnweightedGraphNode::UnweightedGraphNode(int value)
+UnweightedGraphNode::UnweightedGraphNode(size_t value)
 {
 	this->value = value;
 }
 
-int UnweightedGraphNode::addEdge(shared_ptr<UnweightedGraphNode> toNode, size_t weight)
+size_t UnweightedGraphNode::addEdge(shared_ptr<UnweightedGraphNode> toNode, size_t weight)
 {
 	shared_ptr<SinglyItem<UnweightedGraphEdge>> edge = edges.front();
 	bool found = false;
