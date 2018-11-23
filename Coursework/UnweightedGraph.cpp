@@ -59,10 +59,13 @@ bool UnweightedGraph::isPath(int nodeA, int nodeB)
 
 	if (nA && nB)
 		return isPath(nA, nB);
-	else if (!nA)
-		cout << "Node: " << to_string(nodeA) << " wasn't found." << endl;
 	else
-		cout << "Node: " << to_string(nodeB) << " wasn't found." << endl;
+	{
+		printC("### Node: " + to_string(!nA ? nodeA : nodeB) + " wasn't found ###", C_RED);
+		cout << endl << endl;
+	}
+
+	return false;
 }
 
 bool UnweightedGraph::isPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB)
@@ -222,6 +225,95 @@ bool UnweightedGraph::isConnected()
 	cout << endl;
 
 	return connected;
+}
+
+bool UnweightedGraph::dijkstraPath(int nodeA, int nodeB)
+{
+	shared_ptr<UnweightedGraphNode> nA = findNode(nodeA);
+	shared_ptr<UnweightedGraphNode> nB = findNode(nodeB);
+
+	if (nA && nB)
+		return dijkstraPath(nA, nB);
+	else
+	{
+		printC("### Node: " + to_string(!nA ? nodeA : nodeB) + " wasn't found ###", C_RED);
+		cout << endl << endl;
+	}
+
+	return false;
+}
+
+struct DijkstraItem
+{
+	weak_ptr<UnweightedGraphNode> reference;
+	weak_ptr<UnweightedGraphNode> fromRef;
+	size_t cost;
+
+	DijkstraItem(shared_ptr<UnweightedGraphNode> reference, shared_ptr<UnweightedGraphNode> fromRef, size_t cost)
+	{
+		this->reference = reference;
+		this->fromRef = fromRef;
+		this->cost = cost;
+	}
+};
+
+bool UnweightedGraph::dijkstraPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB)
+{
+	ListSingly<DijkstraItem> nodes;
+	bool found = false;
+
+	shared_ptr<UnweightedGraphNode> temp = root;
+	do {
+		nodes.push(make_shared<DijkstraItem>(temp, nullptr, UINT64_MAX));
+	} while (temp = temp->next);
+
+	shared_ptr<SinglyItem<DijkstraItem>> current = nodes.front();
+	shared_ptr<SinglyItem<DijkstraItem>> c = current->next;
+	do
+	{
+		if (c->reference->reference.lock() == nodeA)
+		{
+			current = c;
+			break;
+		}
+	} while (c = c->next);
+
+	while (current->reference->reference.lock() != nodeB)
+	{
+		shared_ptr<SinglyItem<UnweightedGraphEdge>> edge = current->reference->reference.lock()->edges.front();
+		do
+		{
+			shared_ptr<SinglyItem<DijkstraItem>> n = nodes.front();
+			do
+			{
+				if (n->reference->reference.lock() == edge->reference->getToNode(current->reference->reference.lock()))
+				{
+					if (edge->reference->weight + current->reference->cost < n->reference->cost)
+						n->reference->cost = edge->reference->weight + current->reference->cost;
+
+					break;
+				}
+			} while (n = n->next);
+		} while (edge = edge->next);
+
+		current = nodes.front();
+		shared_ptr<SinglyItem<DijkstraItem>> n = current->next;
+		do
+		{
+			if (n->reference->cost < current->reference->cost)
+				current = n;
+		} while (n = n->next);
+
+		if (current->reference->reference.lock() == nodeB)
+			found = true;
+	}
+
+	if (found) 
+	{
+		cout << "found" << endl << endl;
+	}
+
+	return found;
 }
 
 void UnweightedGraph::traversalBFS()

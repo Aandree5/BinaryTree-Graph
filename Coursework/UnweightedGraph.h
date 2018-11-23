@@ -46,8 +46,10 @@ public:
 
 	bool isConnected();
 
-	void traversalBFS();
+	bool dijkstraPath(int nodeA, int nodeB);
+	bool dijkstraPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB);
 
+	void traversalBFS();
 	void traversalDFS();
 
 	void print();
