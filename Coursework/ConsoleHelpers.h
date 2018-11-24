@@ -16,6 +16,7 @@
 #define brown SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6)
 #define darkgrey SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8)
 #define darkred SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4)
+#define getCursorPosition(x) CONSOLE_SCREEN_BUFFER_INFO cbsi;GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cbsi);x=cbsi.dwCursorPosition.X
 #endif // _WIN32
 
 #ifdef __linux__
@@ -33,6 +34,7 @@
 #define brown cout << "\033[1;91m"
 #define darkgrey cout << "\033[1;90m"
 #define darkred cout << "\033[0;31m"
+#define getCursorPosition(x) x=0
 #endif // __linux__
 
 enum Color
@@ -51,7 +53,6 @@ enum Color
 
 namespace ConsoleHelpers
 {
-
 
 	bool static changeColour(Color colour)
 	{
@@ -119,8 +120,14 @@ namespace ConsoleHelpers
 	{
 		cout << endl;
 
-		printC("</ ", C_WHITE);
-		printC(title, C_RED);
-		printC(" >", C_WHITE);
+		printC("</ ", C_RED);
+		printC(title, C_WHITE);
+		printC(" >", C_RED);
+	}
+
+	void static printInfo(string info)
+	{
+		cout << endl << "> ";
+		printC(info, C_DARKGREY);
 	}
 };

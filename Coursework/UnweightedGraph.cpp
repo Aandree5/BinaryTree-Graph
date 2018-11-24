@@ -35,21 +35,28 @@ shared_ptr<UnweightedGraphNode> UnweightedGraph::addNode(size_t value)
 	}
 }
 
-bool UnweightedGraph::addEdge(size_t nodeA, size_t nodeB, size_t weight)
+size_t UnweightedGraph::addEdge(size_t nodeA, size_t nodeB, size_t weight)
 {
-	return addEdge(findNode(nodeA), findNode(nodeB), weight);
-}
+	shared_ptr<UnweightedGraphNode> nA = findNode(nodeA);
+	shared_ptr<UnweightedGraphNode> nB = findNode(nodeB);
 
-bool UnweightedGraph::addEdge(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB, size_t weight)
-{
-	if (nodeA && nodeB)
+	if (nA && nB)
+		return addEdge(nA, nB, weight);
+	else
 	{
-		nodeA->addEdge(nodeB, weight);
-
-		return true;
+		printC("### Node: " + to_string(!nA ? nodeA : nodeB) + " wasn't found ###", C_RED);
+		cout << endl << endl;
 	}
 
-	return false;
+	return 0;
+}
+
+size_t UnweightedGraph::addEdge(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB, size_t weight)
+{
+	if (!nodeA || !nodeB || nodeA == nodeB)
+		throw invalid_argument("'nodeA' and 'nodeB' can't be null nor the same.");
+
+		return nodeA->addEdge(nodeB, weight);
 }
 
 size_t UnweightedGraph::countNodes()
@@ -81,8 +88,8 @@ bool UnweightedGraph::isPath(size_t nodeA, size_t nodeB)
 
 bool UnweightedGraph::isPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB)
 {
-	if (!nodeA || !nodeB)
-		throw invalid_argument("'nodeA' and 'nodeB' can't be null.");
+	if (!nodeA || !nodeB || nodeA == nodeB)
+		throw invalid_argument("'nodeA' and 'nodeB' can't be null nor the same.");
 
 	ofstream file("Graph.txt");
 	bool found = false;
@@ -356,7 +363,6 @@ void UnweightedGraph::traversalBFS()
 	}
 
 	size_t nrNodes = countNodes();
-
 	size_t vSize = visited.size();
 
 	if (nrNodes > vSize)
@@ -417,7 +423,6 @@ void UnweightedGraph::traversalDFS()
 	}
 
 	size_t nrNodes = countNodes();
-
 	size_t vSize = visited.size();
 
 	if (nrNodes > vSize)
