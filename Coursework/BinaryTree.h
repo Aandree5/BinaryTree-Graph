@@ -17,6 +17,7 @@ public:
 	vector<string> tempMarked;
 
 
+	///<summary>Creates a new binary tree.</summary>
 	BinaryTree();
 
 	///<summary>Add a new value into the tree.</summary>

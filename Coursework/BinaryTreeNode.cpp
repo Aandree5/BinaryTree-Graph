@@ -13,10 +13,6 @@ BinaryTreeNode::BinaryTreeNode(string value)
 	depth = 1;
 }
 
-BinaryTreeNode::~BinaryTreeNode()
-{
-}
-
 bool BinaryTreeNode::isLeaf()
 {
 	return (!left && !right);

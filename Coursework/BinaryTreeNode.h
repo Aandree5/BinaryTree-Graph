@@ -19,8 +19,9 @@ public:
 	///<summary>Depth of the node, starting at the farthest leaf (1 indexed).</summary>
 	int depth;
 
+	///<summary>Creates a binary tree node with the given value.</summary>
+	///<param name="value">Value for the new node.</param>
 	BinaryTreeNode(string value);
-	~BinaryTreeNode();
 
 	///<summary>Checks if node has childs.</summary>
 	///<returns>True if node is leaf(has no childs), false otherwise.</returns>

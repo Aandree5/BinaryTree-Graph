@@ -53,10 +53,13 @@ enum Color
 
 namespace ConsoleHelpers
 {
-
-	bool static changeColour(Color colour)
+	///<summary>Prints the given string to the console in the given color.</summary>
+	///<param name="text">Text to print to console.</param>
+	///<param name="color">Color in wich to show the given text.</param>
+	void static printC(std::string text, Color color)
 	{
-		switch (colour)
+		bool reset = true;
+		switch (color)
 		{
 		case C_BLUE:
 			blue;
@@ -96,26 +99,18 @@ namespace ConsoleHelpers
 
 		default:
 			grey;
-			return false;
+			reset = false;
 		}
 
-		return true;
-	}
-
-	void static printC(std::string text, Color color)
-	{
-		bool needsReset = changeColour(color);
-		
-		std::cout << text.c_str();
-
-
-		std::cout << std::flush;
+		std::cout << text.c_str() << std::flush;
 
 		// Return color to default
-		if (needsReset)
+		if (reset)
 			grey;
 	}
 
+	///<summary>Prints the given text as a title.</summary>
+	///<param name="text">Text to print as a title.</param>
 	void static printTitle(string title)
 	{
 		cout << endl;
@@ -125,6 +120,8 @@ namespace ConsoleHelpers
 		printC(" >", C_RED);
 	}
 
+	///<summary>Prints the given text as detailed information.</summary>
+	///<param name="text">Text to print as detailed information.</param>
 	void static printInfo(string info)
 	{
 		cout << endl << "> ";

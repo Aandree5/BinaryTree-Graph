@@ -30,6 +30,21 @@
     <ClCompile Include="BinaryTreeTests.cpp">
       <Filter>UnitTesting</Filter>
     </ClCompile>
+    <ClCompile Include="..\UnweightedGraph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UnweightedGraphEdge.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UnweightedGraphNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnweightedGraphEdgeTests.cpp">
+      <Filter>UnitTesting</Filter>
+    </ClCompile>
+    <ClCompile Include="UnweightedGraphNodeTests.cpp">
+      <Filter>UnitTesting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TestsHelper.h">

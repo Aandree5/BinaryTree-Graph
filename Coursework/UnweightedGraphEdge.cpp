@@ -5,6 +5,9 @@
 
 UnweightedGraphEdge::UnweightedGraphEdge(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB, size_t weight)
 {
+	if (!nodeA || !nodeB)
+		throw invalid_argument("Input can't be nullptr");
+
 	this->nodeA = nodeA;
 	this->nodeB = nodeB;
 	this->weight = weight;

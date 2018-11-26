@@ -4,6 +4,8 @@
 
 using namespace std;
 
+///<summary>Template for a queue of singly list items with pointer to objects of the given class.</summary>
+///<typeparam name="T">Class of objects on which to keep a reference.</typeparam>
 template<class T>
 class QueueSingly
 {
@@ -11,12 +13,15 @@ class QueueSingly
 	shared_ptr<SinglyItem<T>> tail;
 
 public:
+	///<summary>Creates a new empty queue.</summary>
 	QueueSingly()
 	{
 		head = nullptr;
 		tail = nullptr;
 	};
 
+	///<summary>Adds a reference to the given object to the back of the queue.</summary>
+	///<param name="reference">Pointer to an object to keep a reference of it.</param>
 	void push_back(shared_ptr<T> reference)
 	{
 		if (!head)
@@ -32,11 +37,15 @@ public:
 		}
 	};
 
+	///<summary>Gets the item ionn the front of the queue.</summary>
+	///<returns>A pointer to the item on the front of the queue.</returns>
 	shared_ptr<SinglyItem<T>> front()
 	{
 		return head;
 	}
 
+	///<summary>Removes the front item from the queue and return the reference it's was keeping.</summary>
+	///<returns>A pointer to the object referenced by the front item in the queue.</returns>
 	shared_ptr<T> pop()
 	{
 		shared_ptr<T> node = nullptr;
@@ -58,11 +67,15 @@ public:
 		return node;
 	};
 
+	///<summary>Checks if there's any items in the queue.</summary>
+	///<returns>True if at least one item is found, false if not.</returns>
 	bool isEmpty()
 	{
 		return head == nullptr;
 	};
 
+	///<summary>Counts the number of items in the queue.</summary>
+	///<returns>The number of items in the queue.</returns>
 	int size()
 	{
 		if (!head)
@@ -80,6 +93,9 @@ public:
 		return size;
 	};
 
+	///<summary>Check if the queue has the given reference.</summary>
+	///<param name="reference">Pointer to the reference to search the queue.</param>
+	///<returns>True if the reference was found, false otherwise.</returns>
 	bool contains(shared_ptr<T> reference)
 	{
 		shared_ptr<SinglyItem<T>> current = head;
@@ -95,6 +111,7 @@ public:
 		return (bool)current;
 	}
 
+	///<summary>Removes all the items from the queue.</summary>
 	void clear()
 	{
 		head = nullptr;

@@ -99,7 +99,7 @@ bool UnweightedGraph::isPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<U
 
 	QueueSingly<UnweightedGraphNode> queue;
 	map<shared_ptr<UnweightedGraphNode>, shared_ptr<UnweightedGraphNode>> visited;
-
+	StackSingly<
 	queue.push_back(nodeA);
 
 	while (!queue.isEmpty())

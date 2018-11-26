@@ -9,6 +9,9 @@ UnweightedGraphNode::UnweightedGraphNode(size_t value)
 
 size_t UnweightedGraphNode::addEdge(shared_ptr<UnweightedGraphNode> toNode, size_t weight)
 {
+	if (!toNode)
+		throw invalid_argument("'toNode' can't be null");
+
 	shared_ptr<SinglyItem<UnweightedGraphEdge>> edge = edges.front();
 	bool found = false;
 
