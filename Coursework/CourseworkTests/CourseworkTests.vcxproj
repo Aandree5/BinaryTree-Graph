@@ -164,6 +164,7 @@
     <ClCompile Include="BinaryTreeTests.cpp" />
     <ClCompile Include="UnweightedGraphNodeTests.cpp" />
     <ClCompile Include="UnweightedGraphEdgeTests.cpp" />
+    <ClCompile Include="UnweightedGraphTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Coursework.vcxproj">

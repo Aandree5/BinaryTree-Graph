@@ -12,24 +12,33 @@
 #include "ConsoleHelpers.h"
 #include "UnweightedGraphNode.h"
 #include "UnweightedGraphEdge.h"
+#include <stdexcept> 
 
 using namespace std;
 using namespace ConsoleHelpers;
 
+///<summary>Data structure used by Dijkstra algorithm.</summary>
 struct DijkstraItem
 {
 	weak_ptr<UnweightedGraphNode> fromRef;
 	size_t cost;
 	bool visited;
 
+	///<summary>Creates a new item, with cost 0 and visited set to false.</summary>
 	DijkstraItem()
 	{
 		this->cost = 0;
 		visited = false;
 	}
 
+	///<summary>Creates a new item, with the given properties.</summary>
+	///<param name="fromRef">Pointer to the node from where this was found.</param>
+	///<param name="cost">Cost to get from the starting node to this one, throught the 'fromRef'.</param>
 	DijkstraItem(shared_ptr<UnweightedGraphNode> fromRef, size_t cost)
 	{
+		if (!fromRef)
+			throw invalid_argument("'fomrRef' can't be null.");
+
 		this->fromRef = fromRef;
 		this->cost = cost;
 		visited = false;
