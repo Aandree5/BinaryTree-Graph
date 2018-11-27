@@ -73,8 +73,10 @@ public:
 		{
 			shared_ptr<SinglyItem<T>> temp = stackTop;
 
-			while ((temp = temp->next) != nullptr)
+			do
+			{
 				size++;
+			} while (temp = temp->next);
 		}
 
 		return size;

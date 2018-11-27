@@ -87,8 +87,10 @@ public:
 		int size = 1;
 		shared_ptr<SinglyItem<T>> temp = head;
 
-		while ((temp = temp->next) != nullptr)
+		do
+		{
 			size++;
+		} while (temp = temp->next);
 
 		return size;
 	};

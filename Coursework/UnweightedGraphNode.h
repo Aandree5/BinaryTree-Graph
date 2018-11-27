@@ -3,6 +3,7 @@
 #include "ListSingly.h"
 #include "SinglyItems.h"
 #include <stdexcept> 
+#include <string>
 
 using namespace std;
 
@@ -24,5 +25,26 @@ public:
 	///<param name="weight">Positive value for the edge weight.</param>
 	///<returns>The number of edges of this node.</returns>
 	size_t addEdge(shared_ptr<UnweightedGraphNode> toNode, size_t weight);
+
+
+	// ### Operators ###
+	operator string() const
+	{
+		return to_string(value);
+	}
+
+	friend ostream &operator<<(ostream &os, const UnweightedGraphNode &node)
+	{
+		os << to_string(node.value);
+
+		return os;
+	}
+
+	friend wostream &operator<<(wostream &wos, const UnweightedGraphNode &node)
+	{
+		wos << to_string(node.value).c_str();
+
+		return wos;
+	}
 };
 

@@ -104,8 +104,10 @@ public:
 		{
 			shared_ptr<SinglyItem<T>> temp = head;
 
-			while (temp = temp->next)
+			do 
+			{
 				size++;
+			} while (temp = temp->next);
 		}
 
 		return size;

@@ -35,19 +35,19 @@ public:
 	// ### Operators ###
 	operator string() const
 	{
-		return value + " '" + to_string(frequency);
+		return value;
 	}
 
 	friend ostream &operator<<(ostream &os, const BinaryTreeNode &node)
 	{
-		os << node.value << " '" << to_string(node.frequency);
+		os << node.value;
 
 		return os;
 	}
 
 	friend wostream &operator<<(wostream &wos, const BinaryTreeNode &node)
 	{
-		wos << node.value.c_str() << " '" << to_string(node.frequency).c_str();
+		wos << node.value.c_str();
 
 		return wos;
 	}

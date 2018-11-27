@@ -16,9 +16,9 @@ public:
 		shared_ptr<UnweightedGraphNode> nodeA = make_shared<UnweightedGraphNode>(5);
 		shared_ptr<UnweightedGraphNode> nodeB = make_shared<UnweightedGraphNode>(6);
 
-		unique_ptr<UnweightedGraphEdge> node = make_unique<UnweightedGraphEdge>(nodeA, nodeB, 50);
+		unique_ptr<UnweightedGraphEdge> edge = make_unique<UnweightedGraphEdge>(nodeA, nodeB, 50);
 
-		Assert::IsNotNull(node.get(), L"Valid input but edge not created.");
+		Assert::IsNotNull(edge.get(), L"Valid input but edge not created.");
 	}
 
 	TEST_METHOD(Constructor_InvalidInput_Fails)
@@ -28,7 +28,7 @@ public:
 
 		try
 		{
-			unique_ptr<BinaryTreeNode> node = make_unique<BinaryTreeNode>(nullptr, nullptr, 50);
+			unique_ptr<UnweightedGraphEdge> edge = make_unique<UnweightedGraphEdge>(nullptr, nullptr, 50);
 		}
 		catch (invalid_argument)
 		{
@@ -43,13 +43,13 @@ public:
 		shared_ptr<UnweightedGraphNode> nodeA = make_shared<UnweightedGraphNode>(5);
 		shared_ptr<UnweightedGraphNode> nodeB = make_shared<UnweightedGraphNode>(6);
 
-		unique_ptr<UnweightedGraphEdge> node = make_unique<UnweightedGraphEdge>(nodeA, nodeB, 50);
+		unique_ptr<UnweightedGraphEdge> edge = make_unique<UnweightedGraphEdge>(nodeA, nodeB, 50);
 
-		Assert::IsNotNull(node->nodeA.lock().get(), L"'Node A' is nullptr.");
-		Assert::IsNotNull(node->nodeB.lock().get(), L"'Node B' is nullptr.");
-		Assert::AreEqual(node->weight, (size_t)50, L"Edge weight is not 50.");
-		Assert::AreEqual(node->nodeA.lock()->value, nodeA->value, L"'Node A' value is not right.");
-		Assert::AreEqual(node->nodeB.lock()->value, nodeB->value, L"'Node B' value is not right.");
+		Assert::IsNotNull(edge->nodeA.lock().get(), L"'Node A' is nullptr.");
+		Assert::IsNotNull(edge->nodeB.lock().get(), L"'Node B' is nullptr.");
+		Assert::AreEqual(edge->weight, (size_t)50, L"Edge weight is not 50.");
+		Assert::AreEqual(edge->nodeA.lock()->value, nodeA->value, L"'Node A' value is not right.");
+		Assert::AreEqual(edge->nodeB.lock()->value, nodeB->value, L"'Node B' value is not right.");
 	}
 
 	TEST_METHOD(GetToNode_Returns_RightNode)
@@ -57,14 +57,14 @@ public:
 		shared_ptr<UnweightedGraphNode> nodeA = make_shared<UnweightedGraphNode>(5);
 		shared_ptr<UnweightedGraphNode> nodeB = make_shared<UnweightedGraphNode>(6);
 
-		unique_ptr<UnweightedGraphEdge> node = make_unique<UnweightedGraphEdge>(nodeA, nodeB, 50);
+		unique_ptr<UnweightedGraphEdge> edge = make_unique<UnweightedGraphEdge>(nodeA, nodeB, 50);
 
-		shared_ptr<UnweightedGraphNode> result = node->getToNode(nodeA);
+		shared_ptr<UnweightedGraphNode> result = edge->getToNode(nodeA);
 
 		Assert::IsNotNull(result.get(), L"'result' is nullptr.");
 		Assert::AreEqual(result->value, nodeB->value, L"'result' value is not right.");
 
-		shared_ptr<UnweightedGraphNode> resultB = node->getToNode(nodeB);
+		shared_ptr<UnweightedGraphNode> resultB = edge->getToNode(nodeB);
 
 		Assert::IsNotNull(resultB.get(), L"'resultB' is nullptr.");
 		Assert::AreEqual(resultB->value, nodeA->value, L"'resultB' value is not right.");

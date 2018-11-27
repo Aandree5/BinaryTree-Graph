@@ -535,7 +535,7 @@ void BinaryTree::print()
 		if (lastChanged != "" && current->value == lastChanged)
 		{
 			printC(*current, Color::C_CYAN);
-
+			printC(" '" + to_string(current->frequency), C_DARKGREY);
 
 			lastChanged = "";
 			tempMarked.clear();
@@ -549,12 +549,16 @@ void BinaryTree::print()
 					if (current->value == marked)
 					{
 						printC(*current, Color::C_BLUE);
+						printC(" '" + to_string(current->frequency), C_DARKGREY);
 						printed = true;
 						break;
 					}
 
 			if (!printed)
+			{
 				cout << *current;
+				printC(" '" + to_string(current->frequency), C_DARKGREY);
+			}
 		}
 
 		cout << endl;

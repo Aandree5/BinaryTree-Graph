@@ -33,11 +33,11 @@ public:
 
 		nodeA->addEdge(nodeB, 2);
 
-		Assert::AreEqual(nodeA->edges.size(), 1, L"'nodeA' edges count is not 1.");
-		Assert::AreEqual(nodeB->edges.size(), 1, L"'nodeB' edges count is not 1.");
-		Assert::AreEqual(nodeB->edges.front()->reference->weight, (size_t)2, L"'edge' weight is not 2.");
-		Assert::AreEqual(nodeB->edges.front()->reference->getToNode(nodeA), nodeB, L"'nodeA' not connected to 'nodeB'.");
-		Assert::AreEqual(nodeA->edges.front()->reference->getToNode(nodeB), nodeA, L"'nodeB' not connected to 'nodeA'.");
+		Assert::AreEqual(1, nodeA->edges.size(), L"'nodeA' edges count is not 1.");
+		Assert::AreEqual(1, nodeB->edges.size(), L"'nodeB' edges count is not 1.");
+		Assert::AreEqual((size_t)2, nodeB->edges.front()->reference->weight, L"'edge' weight is not 2.");
+		Assert::AreEqual(nodeB, nodeB->edges.front()->reference->getToNode(nodeA), L"'nodeA' not connected to 'nodeB'.");
+		Assert::AreEqual(nodeA, nodeA->edges.front()->reference->getToNode(nodeB), L"'nodeB' not connected to 'nodeA'.");
 	}
 
 	TEST_METHOD(AddEdge_InvalidInput_Fails)
@@ -67,11 +67,11 @@ public:
 		// Shouldn't change anything
 		nodeA->addEdge(nodeB, 100);
 
-		Assert::AreEqual(nodeA->edges.size(), 1, L"'nodeA' edges count is not 1.");
-		Assert::AreEqual(nodeB->edges.size(), 1, L"'nodeB' edges count is not 1.");
-		Assert::AreEqual(nodeB->edges.front()->reference->weight, (size_t)2, L"'edge' weight is not 2.");
-		Assert::AreEqual(nodeB->edges.front()->reference->getToNode(nodeA), nodeB, L"'nodeA' not connected to 'nodeB'.");
-		Assert::AreEqual(nodeA->edges.front()->reference->getToNode(nodeB), nodeA, L"'nodeB' not connected to 'nodeA'.");
+		Assert::AreEqual(1, nodeA->edges.size(), L"'nodeA' edges count is not 1.");
+		Assert::AreEqual(1, nodeB->edges.size(), L"'nodeB' edges count is not 1.");
+		Assert::AreEqual((size_t)2, nodeB->edges.front()->reference->weight, L"'edge' weight is not 2.");
+		Assert::AreEqual(nodeB, nodeB->edges.front()->reference->getToNode(nodeA), L"'nodeA' not connected to 'nodeB'.");
+		Assert::AreEqual(nodeA, nodeA->edges.front()->reference->getToNode(nodeB), L"'nodeB' not connected to 'nodeA'.");
 	}
 
 };
