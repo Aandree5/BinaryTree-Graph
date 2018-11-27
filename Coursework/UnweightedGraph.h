@@ -27,7 +27,7 @@ struct DijkstraItem
 	///<summary>Creates a new item, with cost 0 and visited set to false.</summary>
 	DijkstraItem()
 	{
-		this->cost = 0;
+		this->cost = UINT64_MAX;
 		visited = false;
 	}
 

@@ -61,11 +61,16 @@ size_t UnweightedGraph::addEdge(shared_ptr<UnweightedGraphNode> nodeA, shared_pt
 
 size_t UnweightedGraph::countNodes()
 {
+	if (!root)
+		return 0;
+
 	shared_ptr<UnweightedGraphNode> current = root;
 	size_t nrNodes = 0;
 
-	while (current = current->next)
+	do
+	{
 		nrNodes++;
+	} while (current = current->next);
 
 	return nrNodes;
 }
@@ -241,6 +246,9 @@ bool UnweightedGraph::dijkstraPath(size_t nodeA, size_t nodeB)
 
 bool UnweightedGraph::dijkstraPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB)
 {
+	if (!nodeA || !nodeB || nodeA == nodeB)
+		throw invalid_argument("'nodeA' and 'nodeB' can't be null nor the same.");
+
 	map<shared_ptr<UnweightedGraphNode>, DijkstraItem> nodes;
 	bool found = false;
 
@@ -248,40 +256,52 @@ bool UnweightedGraph::dijkstraPath(shared_ptr<UnweightedGraphNode> nodeA, shared
 
 	shared_ptr<UnweightedGraphNode> temp = root;
 	do {
-		nodes[temp] = DijkstraItem(nullptr, UINT64_MAX);
+		nodes[temp] = DijkstraItem();
 	} while (temp = temp->next);
 
 	shared_ptr<UnweightedGraphNode> current = nodeA;
 	nodes[current].cost = 0;
 
-	while (current != nodeB)
+	if (current->edges.front())
 	{
-		nodes[current].visited = true;
-
-		shared_ptr<SinglyItem<UnweightedGraphEdge>> edge = current->edges.front();
-		do
+		while (current != nodeB)
 		{
-			shared_ptr<UnweightedGraphNode> toNode = edge->reference->getToNode(current);
-			if (edge->reference->weight + nodes[current].cost < nodes[toNode].cost)
+			nodes[current].visited = true;
+
+			shared_ptr<SinglyItem<UnweightedGraphEdge>> edge = current->edges.front();
+			while (edge)
 			{
-				nodes[toNode].cost = edge->reference->weight + nodes[current].cost;
-				nodes[toNode].fromRef = current;
+				shared_ptr<UnweightedGraphNode> toNode = edge->reference->getToNode(current);
+				if (edge->reference->weight + nodes[current].cost < nodes[toNode].cost)
+				{
+					nodes[toNode].cost = edge->reference->weight + nodes[current].cost;
+					nodes[toNode].fromRef = current;
+				}
+
+				edge = edge->next;
 			}
-		} while (edge = edge->next);
 
+			// Check when all the nodes have been visited and there's nowhere else to go
+			bool allVisited = true;
 
+			for (pair<shared_ptr<UnweightedGraphNode>, DijkstraItem> n : nodes)
+			{
+				if (n.second.cost < nodes[current].cost && !n.second.visited || nodes[current].visited)
+					current = n.first;
 
-		for (pair<shared_ptr<UnweightedGraphNode>, DijkstraItem> n : nodes)
-		{
-			if (n.second.cost < nodes[current].cost && !n.second.visited || nodes[current].visited)
-				current = n.first;
+				if (!n.second.visited)
+					allVisited = false;
+			}
+
+			if (allVisited)
+				break;
+
+			if (current == nodeB && nodes[current].fromRef.lock())
+				found = true;
 		}
-
-		if (current == nodeB && nodes[current].fromRef.lock())
-			found = true;
 	}
 
-	if (found) 
+	if (found)
 	{
 		StackSingly<UnweightedGraphNode> stack;
 		shared_ptr<UnweightedGraphNode> nodeToFind = nodes[nodeB].fromRef.lock();

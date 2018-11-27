@@ -48,8 +48,8 @@ public:
 		graph->addEdge(10, 20, 20);
 		graph->addEdge(20, 30, 10);
 
-		Assert::AreEqual(nodeB, nodeA->edges.front()->reference->getToNode(nodeA));
-		Assert::AreEqual(nodeC, nodeB->edges.front()->next->reference->getToNode(nodeB));
+		Assert::AreEqual(nodeB, nodeA->edges.front()->reference->getToNode(nodeA), L"'nodeA' should be connected to 'nodeB'");
+		Assert::AreEqual(nodeC, nodeB->edges.front()->reference->getToNode(nodeB), L"'nodeB' should be connected to 'nodeC'");
 	}
 
 	TEST_METHOD(AddEdge_ValidInput_NodeReference)
@@ -62,8 +62,8 @@ public:
 		graph->addEdge(nodeA, nodeB, 20);
 		graph->addEdge(nodeB, nodeC, 10);
 
-		Assert::AreEqual(nodeB, nodeA->edges.front()->reference->getToNode(nodeA));
-		Assert::AreEqual(nodeC, nodeB->edges.front()->next->reference->getToNode(nodeB));
+		Assert::AreEqual(nodeB, nodeA->edges.front()->reference->getToNode(nodeA), L"'nodeA' should be connected to 'nodeB'");
+		Assert::AreEqual(nodeC, nodeB->edges.front()->reference->getToNode(nodeB), L"'nodeB' should be connected to 'nodeC'");
 	}
 
 	TEST_METHOD(AddEdge_InvalidInput_Fails)

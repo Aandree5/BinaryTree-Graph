@@ -91,7 +91,7 @@ public:
 
 		while (current)
 		{
-			if (current->reference.lock() == reference)
+			if (current->reference == reference)
 				break;
 
 			current = current->next;
