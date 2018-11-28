@@ -120,6 +120,8 @@ namespace ConsoleHelpers
 		printC("</ ", C_RED);
 		printC(title, C_WHITE);
 		printC(" >", C_RED);
+
+		cout << endl;
 	}
 
 	///<summary>Prints the given text as detailed information.</summary>
@@ -127,7 +129,7 @@ namespace ConsoleHelpers
 	///<param name="text">Text to print as detailed information.</param>
 	void static printInfo(string info)
 	{
-		cout << endl << "> ";
-		printC(info, C_DARKGREY);
+		printC("// " + info, C_DARKGREY);
+		cout << endl;
 	}
 };
