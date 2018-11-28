@@ -12,6 +12,7 @@ struct SinglyItem
 	shared_ptr<SinglyItem<T>> next;
 
 	///<summary>Creates an item with a pointer to the given object.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	///<param name="reference">Pointer to an object to keep a reference of it.</param>
 	SinglyItem(shared_ptr<T> reference)
 	{

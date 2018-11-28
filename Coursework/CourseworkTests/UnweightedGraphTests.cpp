@@ -400,4 +400,36 @@ public:
 
 		Assert::IsTrue(passed, L"Invalid argument exception not thrown.");
 	}
+
+	TEST_METHOD(DijkstraPath_HalfConnected_NodeReference)
+	{
+		unique_ptr<UnweightedGraph> graph = make_unique<UnweightedGraph>();
+		shared_ptr<UnweightedGraphNode> nodeA = graph->addNode(10);
+		shared_ptr<UnweightedGraphNode> nodeB = graph->addNode(20);
+		shared_ptr<UnweightedGraphNode> nodeC = graph->addNode(30);
+		shared_ptr<UnweightedGraphNode> nodeD = graph->addNode(40);
+		shared_ptr<UnweightedGraphNode> nodeE = graph->addNode(50);
+		shared_ptr<UnweightedGraphNode> nodeF = graph->addNode(60);
+		shared_ptr<UnweightedGraphNode> nodeG = graph->addNode(70);
+		shared_ptr<UnweightedGraphNode> nodeH = graph->addNode(80);
+		shared_ptr<UnweightedGraphNode> nodeI = graph->addNode(90);
+		shared_ptr<UnweightedGraphNode> nodeJ = graph->addNode(1);
+
+		graph->addEdge(nodeA, nodeB, 20);
+		graph->addEdge(nodeB, nodeC, 10);
+		graph->addEdge(nodeC, nodeD, 10);
+		graph->addEdge(nodeD, nodeE, 10);
+		graph->addEdge(nodeF, nodeG, 10);
+		graph->addEdge(nodeG, nodeH, 10);
+		graph->addEdge(nodeA, nodeI, 10);
+
+		Assert::IsFalse(graph->dijkstraPath(nodeA, nodeF), L"There should not exist a path between 'nodeA' and 'nodeF'");
+		Assert::IsFalse(graph->dijkstraPath(nodeH, nodeC), L"There should not exist a path between 'nodeH' and 'nodeC'");
+		Assert::IsFalse(graph->dijkstraPath(nodeB, nodeG), L"There should not exist a path between 'nodeB' and 'nodeG'");
+		Assert::IsTrue(graph->dijkstraPath(nodeA, nodeI), L"There should exist a path between 'nodeA' and 'nodeI'");
+		Assert::IsFalse(graph->dijkstraPath(nodeI, nodeH), L"There should not exist a path between 'nodeI' and 'nodeH'");
+
+		Assert::IsTrue(graph->dijkstraPath(nodeB, nodeE), L"There should exist a path between 'nodeB' and 'nodeE'");
+		Assert::IsTrue(graph->dijkstraPath(nodeF, nodeH), L"There should exist a path between 'nodeF' and 'nodeH'");
+	}
 };

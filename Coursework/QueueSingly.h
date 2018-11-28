@@ -14,6 +14,7 @@ class QueueSingly
 
 public:
 	///<summary>Creates a new empty queue.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	QueueSingly()
 	{
 		head = nullptr;
@@ -21,6 +22,7 @@ public:
 	};
 
 	///<summary>Adds a reference to the given object to the back of the queue.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	///<param name="reference">Pointer to an object to keep a reference of it.</param>
 	void push_back(shared_ptr<T> reference)
 	{
@@ -38,6 +40,7 @@ public:
 	};
 
 	///<summary>Gets the item ionn the front of the queue.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	///<returns>A pointer to the item on the front of the queue.</returns>
 	shared_ptr<SinglyItem<T>> front()
 	{
@@ -45,6 +48,7 @@ public:
 	}
 
 	///<summary>Removes the front item from the queue and return the reference it's was keeping.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	///<returns>A pointer to the object referenced by the front item in the queue.</returns>
 	shared_ptr<T> pop()
 	{
@@ -68,6 +72,7 @@ public:
 	};
 
 	///<summary>Checks if there's any items in the queue.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	///<returns>True if at least one item is found, false if not.</returns>
 	bool isEmpty()
 	{
@@ -75,6 +80,7 @@ public:
 	};
 
 	///<summary>Counts the number of items in the queue.</summary>
+	///<remark>BigO notation for worst case is O(n).</remark>
 	///<returns>The number of items in the queue.</returns>
 	int size()
 	{
@@ -96,6 +102,7 @@ public:
 	};
 
 	///<summary>Check if the queue has the given reference.</summary>
+	///<remark>BigO notation for worst case is O(n).</remark>
 	///<param name="reference">Pointer to the reference to search the queue.</param>
 	///<returns>True if the reference was found, false otherwise.</returns>
 	bool contains(shared_ptr<T> reference)
@@ -114,6 +121,7 @@ public:
 	}
 
 	///<summary>Removes all the items from the queue.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	void clear()
 	{
 		head = nullptr;

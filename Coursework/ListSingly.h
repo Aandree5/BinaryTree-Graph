@@ -13,12 +13,14 @@ class ListSingly
 
 public:
 	///<summary>Creates a new empty list.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	ListSingly()
 	{
 		head = nullptr;
 	};
 
 	///<summary>Adds a reference to the given object to the list.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	///<param name="reference">Pointer to an object to keep a reference of it.</param>
 	void push(shared_ptr<T> reference)
 	{
@@ -34,6 +36,7 @@ public:
 	};
 
 	///<summary>Gets the item on the front of the list.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	///<returns>A pointer to the item on the front of the list.</returns>
 	shared_ptr<SinglyItem<T>> front()
 	{
@@ -41,6 +44,7 @@ public:
 	}
 
 	///<summary>Removes the front item from the list and return the reference it's was keeping.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	///<returns>A pointer to the object referenced by the front item in the list.</returns>
 	shared_ptr<T> pop()
 	{
@@ -57,6 +61,7 @@ public:
 	};
 
 	///<summary>Revoves the given item from anywhere in the list.</summary>
+	///<remark>BigO notation for worst case is O(n).</remark>
 	///<param name="reference">Pointer to the reference to search the list.</param>
 	///<returns>A pointer to the reference held by the removed item.</returns>
 	shared_ptr<T> remove(shared_ptr<T> reference)
@@ -88,6 +93,7 @@ public:
 	}
 
 	///<summary>Checks if there's any items in the list.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	///<returns>True if at least one item is found, false if not.</returns>
 	bool isEmpty()
 	{
@@ -95,6 +101,7 @@ public:
 	};
 
 	///<summary>Counts the number of items in the list.</summary>
+	///<remark>BigO notation for worst case is O(n).</remark>
 	///<returns>The number of items in the list.</returns>
 	int size()
 	{
@@ -114,6 +121,7 @@ public:
 	};
 
 	///<summary>Check if the list has the given reference.</summary>
+	///<remark>BigO notation for worst case is O(n).</remark>
 	///<param name="reference">Pointer to the reference to search the list.</param>
 	///<returns>True if the reference was found, false otherwise.</returns>
 	bool contains(shared_ptr<T> reference)
@@ -132,6 +140,7 @@ public:
 	}
 
 	///<summary>Removes all the items from the list.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	void clear()
 	{
 		head = nullptr;

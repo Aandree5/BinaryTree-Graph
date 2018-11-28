@@ -11,7 +11,6 @@ BinaryTree::BinaryTree()
 	root = nullptr;
 }
 
-
 shared_ptr<BinaryTreeNode> BinaryTree::insert(string value)
 {
 	shared_ptr<BinaryTreeNode> nodeToReturn;

@@ -13,12 +13,14 @@ class StackSingly
 
 public:
 	///<summary>Creates a new empty stack.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	StackSingly()
 	{
 		stackTop = nullptr;
 	};
 
 	///<summary>Adds a reference to the given object to the stack.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	///<param name="reference">Pointer to an object to keep a reference of it.</param>
 	void push(shared_ptr<T> reference)
 	{
@@ -34,6 +36,7 @@ public:
 	};
 
 	///<summary>Gets the item on the top of the stack.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	///<returns>A pointer to the item on the top of the stack.</returns>
 	shared_ptr<SinglyItem<T>> top()
 	{
@@ -41,6 +44,7 @@ public:
 	}
 
 	///<summary>Removes the top item from the stack and return the reference it's was keeping.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	///<returns>A pointer to the object referenced by the top item in the stack.</returns>
 	shared_ptr<T> pop()
 	{
@@ -57,6 +61,7 @@ public:
 	};
 
 	///<summary>Checks if there's any items in the stack.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	///<returns>True if at least one item is found, false if not.</returns>
 	bool isEmpty()
 	{
@@ -64,6 +69,7 @@ public:
 	};
 
 	///<summary>Counts the number of items in the stack.</summary>
+	///<remark>BigO notation for worst case is O(n).</remark>
 	///<returns>The number of items in the stack.</returns>
 	int size()
 	{
@@ -83,6 +89,7 @@ public:
 	};
 
 	///<summary>Check if the stack has the given reference.</summary>
+	///<remark>BigO notation for worst case is O(n).</remark>
 	///<param name="reference">Pointer to the reference to search the stack.</param>
 	///<returns>True if the reference was found, false otherwise.</returns>
 	bool contains(shared_ptr<T> reference)
@@ -101,6 +108,7 @@ public:
 	}
 
 	///<summary>Removes all the items from the stack.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	void clear()
 	{
 		stackTop = nullptr;

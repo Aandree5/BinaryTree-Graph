@@ -20,14 +20,17 @@ public:
 	int depth;
 
 	///<summary>Creates a binary tree node with the given value.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	///<param name="value">Value for the new node.</param>
 	BinaryTreeNode(string value);
 
 	///<summary>Checks if node has childs.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	///<returns>True if node is leaf(has no childs), false otherwise.</returns>
 	bool isLeaf();
 
 	///<summary>Checks if node has only one child.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	///<returns>A pointer to the child node if true, null pointer otherwise.</returns>
 	shared_ptr<BinaryTreeNode> hasOnlyOnechild();
 

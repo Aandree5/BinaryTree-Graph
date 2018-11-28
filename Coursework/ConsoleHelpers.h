@@ -54,6 +54,7 @@ enum Color
 namespace ConsoleHelpers
 {
 	///<summary>Prints the given string to the console in the given color.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	///<param name="text">Text to print to console.</param>
 	///<param name="color">Color in wich to show the given text.</param>
 	void static printC(std::string text, Color color)
@@ -110,6 +111,7 @@ namespace ConsoleHelpers
 	}
 
 	///<summary>Prints the given text as a title.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	///<param name="text">Text to print as a title.</param>
 	void static printTitle(string title)
 	{
@@ -121,6 +123,7 @@ namespace ConsoleHelpers
 	}
 
 	///<summary>Prints the given text as detailed information.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	///<param name="text">Text to print as detailed information.</param>
 	void static printInfo(string info)
 	{

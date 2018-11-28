@@ -250,7 +250,8 @@ bool UnweightedGraph::dijkstraPath(shared_ptr<UnweightedGraphNode> nodeA, shared
 		throw invalid_argument("'nodeA' and 'nodeB' can't be null nor the same.");
 
 	map<shared_ptr<UnweightedGraphNode>, DijkstraItem> nodes;
-	bool found = false;
+	bool nodeAConnected = false;
+	bool nodeBConnected = false;
 
 	printC("$(" + to_string(nodeA->value) + ") <- ", C_CYAN);
 
@@ -262,46 +263,50 @@ bool UnweightedGraph::dijkstraPath(shared_ptr<UnweightedGraphNode> nodeA, shared
 	shared_ptr<UnweightedGraphNode> current = nodeA;
 	nodes[current].cost = 0;
 
-	if (current->edges.front())
+	while (current != nodeB)
 	{
-		while (current != nodeB)
+		nodes[current].visited = true;
+
+		shared_ptr<SinglyItem<UnweightedGraphEdge>> edge = current->edges.front();
+		while (edge)
 		{
-			nodes[current].visited = true;
-
-			shared_ptr<SinglyItem<UnweightedGraphEdge>> edge = current->edges.front();
-			while (edge)
+			shared_ptr<UnweightedGraphNode> toNode = edge->reference->getToNode(current);
+			if (edge->reference->weight + nodes[current].cost < nodes[toNode].cost)
 			{
-				shared_ptr<UnweightedGraphNode> toNode = edge->reference->getToNode(current);
-				if (edge->reference->weight + nodes[current].cost < nodes[toNode].cost)
-				{
-					nodes[toNode].cost = edge->reference->weight + nodes[current].cost;
-					nodes[toNode].fromRef = current;
-				}
-
-				edge = edge->next;
+				nodes[toNode].cost = edge->reference->weight + nodes[current].cost;
+				nodes[toNode].fromRef = current;
 			}
 
-			// Check when all the nodes have been visited and there's nowhere else to go
-			bool allVisited = true;
-
-			for (pair<shared_ptr<UnweightedGraphNode>, DijkstraItem> n : nodes)
-			{
-				if (n.second.cost < nodes[current].cost && !n.second.visited || nodes[current].visited)
-					current = n.first;
-
-				if (!n.second.visited)
-					allVisited = false;
-			}
-
-			if (allVisited)
-				break;
-
-			if (current == nodeB && nodes[current].fromRef.lock())
-				found = true;
+			edge = edge->next;
 		}
+
+		// Check when all the nodes have been visited and there's nowhere else to go
+		bool allVisited = true;
+
+		for (pair<shared_ptr<UnweightedGraphNode>, DijkstraItem> n : nodes)
+		{
+			if (n.second.cost < nodes[current].cost && !n.second.visited || nodes[current].visited)
+				current = n.first;
+
+			if (!n.second.visited)
+				allVisited = false;
+		}
+
+		if (allVisited)
+			break;
+
+		if (current == nodeB && nodes[current].fromRef.lock())
+			nodeBConnected = true;
 	}
 
-	if (found)
+	for (pair<shared_ptr<UnweightedGraphNode>, DijkstraItem> n : nodes)
+		if (n.second.fromRef.lock() == nodeA)
+		{
+			nodeAConnected = true;
+			break;
+		}
+
+	if (nodeAConnected && nodeBConnected)
 	{
 		StackSingly<UnweightedGraphNode> stack;
 		shared_ptr<UnweightedGraphNode> nodeToFind = nodes[nodeB].fromRef.lock();
@@ -335,7 +340,7 @@ bool UnweightedGraph::dijkstraPath(shared_ptr<UnweightedGraphNode> nodeA, shared
 
 	cout << endl << endl;
 
-	return found;
+	return nodeAConnected && nodeBConnected;
 }
 
 void UnweightedGraph::traversalBFS()

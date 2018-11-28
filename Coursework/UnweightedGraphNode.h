@@ -17,10 +17,12 @@ public:
 	shared_ptr<UnweightedGraphNode> next;
 
 	///<summary>Creates a graph node with the given value.</summary>
+	///<remark>BigO notation for worst case is O(1).</remark>
 	///<param name="value">Value for the node.</param>
 	UnweightedGraphNode(size_t value);
 
 	///<summary>Creates a graph edge between this node and the given one, with the given weight.</summary>
+	///<remark>BigO notation for worst case is O(n).</remark>
 	///<param name="toNode">Pointer to the node to connect to.</param>
 	///<param name="weight">Positive value for the edge weight.</param>
 	///<returns>The number of edges of this node.</returns>
