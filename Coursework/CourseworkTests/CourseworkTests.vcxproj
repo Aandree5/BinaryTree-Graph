@@ -157,14 +157,14 @@
   <ItemGroup>
     <ClCompile Include="..\BinaryTree.cpp" />
     <ClCompile Include="..\BinaryTreeNode.cpp" />
-    <ClCompile Include="..\UnweightedGraph.cpp" />
-    <ClCompile Include="..\UnweightedGraphEdge.cpp" />
-    <ClCompile Include="..\UnweightedGraphNode.cpp" />
+    <ClCompile Include="..\Graph.cpp" />
+    <ClCompile Include="..\GraphEdge.cpp" />
+    <ClCompile Include="..\GraphNode.cpp" />
     <ClCompile Include="BinaryTreeNodeTests.cpp" />
     <ClCompile Include="BinaryTreeTests.cpp" />
-    <ClCompile Include="UnweightedGraphNodeTests.cpp" />
-    <ClCompile Include="UnweightedGraphEdgeTests.cpp" />
-    <ClCompile Include="UnweightedGraphTests.cpp" />
+    <ClCompile Include="GraphNodeTests.cpp" />
+    <ClCompile Include="GraphEdgeTests.cpp" />
+    <ClCompile Include="GraphTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Coursework.vcxproj">

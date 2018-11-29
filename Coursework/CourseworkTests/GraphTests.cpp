@@ -1,30 +1,30 @@
 #include "CppUnitTest.h"
 #include "TestsHelper.h"
-#include "../UnweightedGraph.h"
-#include "../UnweightedGraphEdge.h"
-#include "../UnweightedGraphNode.h"
+#include "../Graph.h"
+#include "../GraphEdge.h"
+#include "../GraphNode.h"
 #include <memory>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std;
 
-TEST_CLASS(UnweightedGraphTests)
+TEST_CLASS(GraphTests)
 {
 public:
 
 	TEST_METHOD(Constructor_ValidInput_CreatesGraph)
 	{
-		unique_ptr<UnweightedGraph> graph = make_unique<UnweightedGraph>();
+		unique_ptr<Graph> graph = make_unique<Graph>();
 
 		Assert::IsNotNull(graph.get(), L"'graph' is null.");
 	}
 
 	TEST_METHOD(AddNode)
 	{
-		unique_ptr<UnweightedGraph> graph = make_unique<UnweightedGraph>();
-		shared_ptr<UnweightedGraphNode> nodeA = graph->addNode(10);
-		shared_ptr<UnweightedGraphNode> nodeB = graph->addNode(20);
-		shared_ptr<UnweightedGraphNode> nodeC = graph->addNode(30);
+		unique_ptr<Graph> graph = make_unique<Graph>();
+		shared_ptr<GraphNode> nodeA = graph->addNode(10);
+		shared_ptr<GraphNode> nodeB = graph->addNode(20);
+		shared_ptr<GraphNode> nodeC = graph->addNode(30);
 
 		Assert::IsNotNull(nodeA.get(), L"'nodeA' is null.");
 		Assert::IsNotNull(nodeA->next.get(), L"'nodeA' next is null.");
@@ -40,10 +40,10 @@ public:
 
 	TEST_METHOD(AddEdge_NodeValue)
 	{
-		unique_ptr<UnweightedGraph> graph = make_unique<UnweightedGraph>();
-		shared_ptr<UnweightedGraphNode> nodeA = graph->addNode(10);
-		shared_ptr<UnweightedGraphNode> nodeB = graph->addNode(20);
-		shared_ptr<UnweightedGraphNode> nodeC = graph->addNode(30);
+		unique_ptr<Graph> graph = make_unique<Graph>();
+		shared_ptr<GraphNode> nodeA = graph->addNode(10);
+		shared_ptr<GraphNode> nodeB = graph->addNode(20);
+		shared_ptr<GraphNode> nodeC = graph->addNode(30);
 
 		graph->addEdge(10, 20, 20);
 		graph->addEdge(20, 30, 10);
@@ -54,10 +54,10 @@ public:
 
 	TEST_METHOD(AddEdge_ValidInput_NodeReference)
 	{
-		unique_ptr<UnweightedGraph> graph = make_unique<UnweightedGraph>();
-		shared_ptr<UnweightedGraphNode> nodeA = graph->addNode(10);
-		shared_ptr<UnweightedGraphNode> nodeB = graph->addNode(20);
-		shared_ptr<UnweightedGraphNode> nodeC = graph->addNode(30);
+		unique_ptr<Graph> graph = make_unique<Graph>();
+		shared_ptr<GraphNode> nodeA = graph->addNode(10);
+		shared_ptr<GraphNode> nodeB = graph->addNode(20);
+		shared_ptr<GraphNode> nodeC = graph->addNode(30);
 
 		graph->addEdge(nodeA, nodeB, 20);
 		graph->addEdge(nodeB, nodeC, 10);
@@ -68,10 +68,10 @@ public:
 
 	TEST_METHOD(AddEdge_InvalidInput_Fails)
 	{
-		unique_ptr<UnweightedGraph> graph = make_unique<UnweightedGraph>();
-		shared_ptr<UnweightedGraphNode> nodeA = graph->addNode(10);
-		shared_ptr<UnweightedGraphNode> nodeB = graph->addNode(20);
-		shared_ptr<UnweightedGraphNode> nodeC = graph->addNode(30);
+		unique_ptr<Graph> graph = make_unique<Graph>();
+		shared_ptr<GraphNode> nodeA = graph->addNode(10);
+		shared_ptr<GraphNode> nodeB = graph->addNode(20);
+		shared_ptr<GraphNode> nodeC = graph->addNode(30);
 		bool passed = false;
 
 		try
@@ -112,7 +112,7 @@ public:
 
 	TEST_METHOD(CountNodes)
 	{
-		unique_ptr<UnweightedGraph> graph = make_unique<UnweightedGraph>();
+		unique_ptr<Graph> graph = make_unique<Graph>();
 		
 		Assert::AreEqual((size_t)0, graph->countNodes(), L"There should be 0 nodes in the graph.");
 
@@ -131,17 +131,17 @@ public:
 
 	TEST_METHOD(IsPath_NodeValue)
 	{
-		unique_ptr<UnweightedGraph> graph = make_unique<UnweightedGraph>();
-		shared_ptr<UnweightedGraphNode> nodeA = graph->addNode(10);
-		shared_ptr<UnweightedGraphNode> nodeB = graph->addNode(20);
-		shared_ptr<UnweightedGraphNode> nodeC = graph->addNode(30);
-		shared_ptr<UnweightedGraphNode> nodeD = graph->addNode(40);
-		shared_ptr<UnweightedGraphNode> nodeE = graph->addNode(50);
-		shared_ptr<UnweightedGraphNode> nodeF = graph->addNode(60);
-		shared_ptr<UnweightedGraphNode> nodeG = graph->addNode(70);
-		shared_ptr<UnweightedGraphNode> nodeH = graph->addNode(80);
-		shared_ptr<UnweightedGraphNode> nodeI = graph->addNode(90);
-		shared_ptr<UnweightedGraphNode> nodeJ = graph->addNode(1);
+		unique_ptr<Graph> graph = make_unique<Graph>();
+		shared_ptr<GraphNode> nodeA = graph->addNode(10);
+		shared_ptr<GraphNode> nodeB = graph->addNode(20);
+		shared_ptr<GraphNode> nodeC = graph->addNode(30);
+		shared_ptr<GraphNode> nodeD = graph->addNode(40);
+		shared_ptr<GraphNode> nodeE = graph->addNode(50);
+		shared_ptr<GraphNode> nodeF = graph->addNode(60);
+		shared_ptr<GraphNode> nodeG = graph->addNode(70);
+		shared_ptr<GraphNode> nodeH = graph->addNode(80);
+		shared_ptr<GraphNode> nodeI = graph->addNode(90);
+		shared_ptr<GraphNode> nodeJ = graph->addNode(1);
 
 		graph->addEdge(nodeA, nodeB, 20);
 		graph->addEdge(nodeB, nodeC, 10);
@@ -165,17 +165,17 @@ public:
 
 	TEST_METHOD(IsPath_ValidInput_NodeReference)
 	{
-		unique_ptr<UnweightedGraph> graph = make_unique<UnweightedGraph>();
-		shared_ptr<UnweightedGraphNode> nodeA = graph->addNode(10);
-		shared_ptr<UnweightedGraphNode> nodeB = graph->addNode(20);
-		shared_ptr<UnweightedGraphNode> nodeC = graph->addNode(30);
-		shared_ptr<UnweightedGraphNode> nodeD = graph->addNode(40);
-		shared_ptr<UnweightedGraphNode> nodeE = graph->addNode(50);
-		shared_ptr<UnweightedGraphNode> nodeF = graph->addNode(60);
-		shared_ptr<UnweightedGraphNode> nodeG = graph->addNode(70);
-		shared_ptr<UnweightedGraphNode> nodeH = graph->addNode(80);
-		shared_ptr<UnweightedGraphNode> nodeI = graph->addNode(90);
-		shared_ptr<UnweightedGraphNode> nodeJ = graph->addNode(1);
+		unique_ptr<Graph> graph = make_unique<Graph>();
+		shared_ptr<GraphNode> nodeA = graph->addNode(10);
+		shared_ptr<GraphNode> nodeB = graph->addNode(20);
+		shared_ptr<GraphNode> nodeC = graph->addNode(30);
+		shared_ptr<GraphNode> nodeD = graph->addNode(40);
+		shared_ptr<GraphNode> nodeE = graph->addNode(50);
+		shared_ptr<GraphNode> nodeF = graph->addNode(60);
+		shared_ptr<GraphNode> nodeG = graph->addNode(70);
+		shared_ptr<GraphNode> nodeH = graph->addNode(80);
+		shared_ptr<GraphNode> nodeI = graph->addNode(90);
+		shared_ptr<GraphNode> nodeJ = graph->addNode(1);
 
 		graph->addEdge(nodeA, nodeB, 20);
 		graph->addEdge(nodeB, nodeC, 10);
@@ -199,8 +199,8 @@ public:
 
 	TEST_METHOD(IsPath_InvalidInput_NodeReference)
 	{
-		unique_ptr<UnweightedGraph> graph = make_unique<UnweightedGraph>();
-		shared_ptr<UnweightedGraphNode> nodeA = graph->addNode(10);
+		unique_ptr<Graph> graph = make_unique<Graph>();
+		shared_ptr<GraphNode> nodeA = graph->addNode(10);
 		bool passed = false;
 
 		try
@@ -241,13 +241,13 @@ public:
 
 	TEST_METHOD(FindNode)
 	{
-		unique_ptr<UnweightedGraph> graph = make_unique<UnweightedGraph>();
-		shared_ptr<UnweightedGraphNode> nodeA = graph->addNode(10);
-		shared_ptr<UnweightedGraphNode> nodeB = graph->addNode(20);
-		shared_ptr<UnweightedGraphNode> nodeC = graph->addNode(30);
-		shared_ptr<UnweightedGraphNode> nodeD = graph->addNode(40);
+		unique_ptr<Graph> graph = make_unique<Graph>();
+		shared_ptr<GraphNode> nodeA = graph->addNode(10);
+		shared_ptr<GraphNode> nodeB = graph->addNode(20);
+		shared_ptr<GraphNode> nodeC = graph->addNode(30);
+		shared_ptr<GraphNode> nodeD = graph->addNode(40);
 
-		shared_ptr<UnweightedGraphNode> result = graph->findNode(10);
+		shared_ptr<GraphNode> result = graph->findNode(10);
 
 		Assert::IsNotNull(result.get(), L"'result' should not be null.");
 
@@ -262,17 +262,17 @@ public:
 
 	TEST_METHOD(IsConnected)
 	{
-		unique_ptr<UnweightedGraph> graph = make_unique<UnweightedGraph>();
-		shared_ptr<UnweightedGraphNode> nodeA = graph->addNode(10);
-		shared_ptr<UnweightedGraphNode> nodeB = graph->addNode(20);
-		shared_ptr<UnweightedGraphNode> nodeC = graph->addNode(30);
-		shared_ptr<UnweightedGraphNode> nodeD = graph->addNode(40);
-		shared_ptr<UnweightedGraphNode> nodeE = graph->addNode(50);
-		shared_ptr<UnweightedGraphNode> nodeF = graph->addNode(60);
-		shared_ptr<UnweightedGraphNode> nodeG = graph->addNode(70);
-		shared_ptr<UnweightedGraphNode> nodeH = graph->addNode(80);
-		shared_ptr<UnweightedGraphNode> nodeI = graph->addNode(90);
-		shared_ptr<UnweightedGraphNode> nodeJ = graph->addNode(1);
+		unique_ptr<Graph> graph = make_unique<Graph>();
+		shared_ptr<GraphNode> nodeA = graph->addNode(10);
+		shared_ptr<GraphNode> nodeB = graph->addNode(20);
+		shared_ptr<GraphNode> nodeC = graph->addNode(30);
+		shared_ptr<GraphNode> nodeD = graph->addNode(40);
+		shared_ptr<GraphNode> nodeE = graph->addNode(50);
+		shared_ptr<GraphNode> nodeF = graph->addNode(60);
+		shared_ptr<GraphNode> nodeG = graph->addNode(70);
+		shared_ptr<GraphNode> nodeH = graph->addNode(80);
+		shared_ptr<GraphNode> nodeI = graph->addNode(90);
+		shared_ptr<GraphNode> nodeJ = graph->addNode(1);
 
 		graph->addEdge(nodeA, nodeB, 20);
 		graph->addEdge(nodeB, nodeC, 10);
@@ -293,17 +293,17 @@ public:
 
 	TEST_METHOD(DijkstraPath_NodeValue)
 	{
-		unique_ptr<UnweightedGraph> graph = make_unique<UnweightedGraph>();
-		shared_ptr<UnweightedGraphNode> nodeA = graph->addNode(10);
-		shared_ptr<UnweightedGraphNode> nodeB = graph->addNode(20);
-		shared_ptr<UnweightedGraphNode> nodeC = graph->addNode(30);
-		shared_ptr<UnweightedGraphNode> nodeD = graph->addNode(40);
-		shared_ptr<UnweightedGraphNode> nodeE = graph->addNode(50);
-		shared_ptr<UnweightedGraphNode> nodeF = graph->addNode(60);
-		shared_ptr<UnweightedGraphNode> nodeG = graph->addNode(70);
-		shared_ptr<UnweightedGraphNode> nodeH = graph->addNode(80);
-		shared_ptr<UnweightedGraphNode> nodeI = graph->addNode(90);
-		shared_ptr<UnweightedGraphNode> nodeJ = graph->addNode(1);
+		unique_ptr<Graph> graph = make_unique<Graph>();
+		shared_ptr<GraphNode> nodeA = graph->addNode(10);
+		shared_ptr<GraphNode> nodeB = graph->addNode(20);
+		shared_ptr<GraphNode> nodeC = graph->addNode(30);
+		shared_ptr<GraphNode> nodeD = graph->addNode(40);
+		shared_ptr<GraphNode> nodeE = graph->addNode(50);
+		shared_ptr<GraphNode> nodeF = graph->addNode(60);
+		shared_ptr<GraphNode> nodeG = graph->addNode(70);
+		shared_ptr<GraphNode> nodeH = graph->addNode(80);
+		shared_ptr<GraphNode> nodeI = graph->addNode(90);
+		shared_ptr<GraphNode> nodeJ = graph->addNode(1);
 
 		graph->addEdge(nodeA, nodeB, 20);
 		graph->addEdge(nodeB, nodeC, 10);
@@ -327,17 +327,17 @@ public:
 
 	TEST_METHOD(DijkstraPath_ValidInput_NodeReference)
 	{
-		unique_ptr<UnweightedGraph> graph = make_unique<UnweightedGraph>();
-		shared_ptr<UnweightedGraphNode> nodeA = graph->addNode(10);
-		shared_ptr<UnweightedGraphNode> nodeB = graph->addNode(20);
-		shared_ptr<UnweightedGraphNode> nodeC = graph->addNode(30);
-		shared_ptr<UnweightedGraphNode> nodeD = graph->addNode(40);
-		shared_ptr<UnweightedGraphNode> nodeE = graph->addNode(50);
-		shared_ptr<UnweightedGraphNode> nodeF = graph->addNode(60);
-		shared_ptr<UnweightedGraphNode> nodeG = graph->addNode(70);
-		shared_ptr<UnweightedGraphNode> nodeH = graph->addNode(80);
-		shared_ptr<UnweightedGraphNode> nodeI = graph->addNode(90);
-		shared_ptr<UnweightedGraphNode> nodeJ = graph->addNode(1);
+		unique_ptr<Graph> graph = make_unique<Graph>();
+		shared_ptr<GraphNode> nodeA = graph->addNode(10);
+		shared_ptr<GraphNode> nodeB = graph->addNode(20);
+		shared_ptr<GraphNode> nodeC = graph->addNode(30);
+		shared_ptr<GraphNode> nodeD = graph->addNode(40);
+		shared_ptr<GraphNode> nodeE = graph->addNode(50);
+		shared_ptr<GraphNode> nodeF = graph->addNode(60);
+		shared_ptr<GraphNode> nodeG = graph->addNode(70);
+		shared_ptr<GraphNode> nodeH = graph->addNode(80);
+		shared_ptr<GraphNode> nodeI = graph->addNode(90);
+		shared_ptr<GraphNode> nodeJ = graph->addNode(1);
 
 		graph->addEdge(nodeA, nodeB, 20);
 		graph->addEdge(nodeB, nodeC, 10);
@@ -361,8 +361,8 @@ public:
 
 	TEST_METHOD(DijkstraPath_InvalidInput_NodeReference)
 	{
-		unique_ptr<UnweightedGraph> graph = make_unique<UnweightedGraph>();
-		shared_ptr<UnweightedGraphNode> nodeA = graph->addNode(10);
+		unique_ptr<Graph> graph = make_unique<Graph>();
+		shared_ptr<GraphNode> nodeA = graph->addNode(10);
 		bool passed = false;
 
 		try
@@ -403,17 +403,17 @@ public:
 
 	TEST_METHOD(DijkstraPath_HalfConnected_NodeReference)
 	{
-		unique_ptr<UnweightedGraph> graph = make_unique<UnweightedGraph>();
-		shared_ptr<UnweightedGraphNode> nodeA = graph->addNode(10);
-		shared_ptr<UnweightedGraphNode> nodeB = graph->addNode(20);
-		shared_ptr<UnweightedGraphNode> nodeC = graph->addNode(30);
-		shared_ptr<UnweightedGraphNode> nodeD = graph->addNode(40);
-		shared_ptr<UnweightedGraphNode> nodeE = graph->addNode(50);
-		shared_ptr<UnweightedGraphNode> nodeF = graph->addNode(60);
-		shared_ptr<UnweightedGraphNode> nodeG = graph->addNode(70);
-		shared_ptr<UnweightedGraphNode> nodeH = graph->addNode(80);
-		shared_ptr<UnweightedGraphNode> nodeI = graph->addNode(90);
-		shared_ptr<UnweightedGraphNode> nodeJ = graph->addNode(1);
+		unique_ptr<Graph> graph = make_unique<Graph>();
+		shared_ptr<GraphNode> nodeA = graph->addNode(10);
+		shared_ptr<GraphNode> nodeB = graph->addNode(20);
+		shared_ptr<GraphNode> nodeC = graph->addNode(30);
+		shared_ptr<GraphNode> nodeD = graph->addNode(40);
+		shared_ptr<GraphNode> nodeE = graph->addNode(50);
+		shared_ptr<GraphNode> nodeF = graph->addNode(60);
+		shared_ptr<GraphNode> nodeG = graph->addNode(70);
+		shared_ptr<GraphNode> nodeH = graph->addNode(80);
+		shared_ptr<GraphNode> nodeI = graph->addNode(90);
+		shared_ptr<GraphNode> nodeJ = graph->addNode(1);
 
 		graph->addEdge(nodeA, nodeB, 20);
 		graph->addEdge(nodeB, nodeC, 10);

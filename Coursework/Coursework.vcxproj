@@ -160,9 +160,9 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="SinglyItems.h" />
     <ClInclude Include="StackSingly.h" />
-    <ClInclude Include="UnweightedGraph.h" />
-    <ClInclude Include="UnweightedGraphEdge.h" />
-    <ClInclude Include="UnweightedGraphNode.h" />
+    <ClInclude Include="Graph.h" />
+    <ClInclude Include="GraphEdge.h" />
+    <ClInclude Include="GraphNode.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BinaryTree.cpp" />
@@ -174,9 +174,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="UnweightedGraph.cpp" />
-    <ClCompile Include="UnweightedGraphEdge.cpp" />
-    <ClCompile Include="UnweightedGraphNode.cpp" />
+    <ClCompile Include="Graph.cpp" />
+    <ClCompile Include="GraphEdge.cpp" />
+    <ClCompile Include="GraphNode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="text-backup.txt" />

@@ -1,22 +1,22 @@
 #include "pch.h"
-#include "UnweightedGraph.h"
+#include "Graph.h"
 
-UnweightedGraph::UnweightedGraph()
+Graph::Graph()
 {
 	root = nullptr;
 }
 
-shared_ptr<UnweightedGraphNode> UnweightedGraph::addNode(size_t value)
+shared_ptr<GraphNode> Graph::addNode(size_t value)
 {
 	if (!root)
 	{
-		root = make_shared<UnweightedGraphNode>(value);
+		root = make_shared<GraphNode>(value);
 
 		return root;
 	}
 	else
 	{
-		shared_ptr<UnweightedGraphNode> current = root;
+		shared_ptr<GraphNode> current = root;
 
 		if (current->value == value)
 			return nullptr;
@@ -29,16 +29,16 @@ shared_ptr<UnweightedGraphNode> UnweightedGraph::addNode(size_t value)
 			current = current->next;
 		}
 
-		current->next = make_shared<UnweightedGraphNode>(value);
+		current->next = make_shared<GraphNode>(value);
 
 		return current->next;
 	}
 }
 
-size_t UnweightedGraph::addEdge(size_t nodeA, size_t nodeB, size_t weight)
+size_t Graph::addEdge(size_t nodeA, size_t nodeB, size_t weight)
 {
-	shared_ptr<UnweightedGraphNode> nA = findNode(nodeA);
-	shared_ptr<UnweightedGraphNode> nB = findNode(nodeB);
+	shared_ptr<GraphNode> nA = findNode(nodeA);
+	shared_ptr<GraphNode> nB = findNode(nodeB);
 
 	if (nA && nB)
 		return addEdge(nA, nB, weight);
@@ -51,7 +51,7 @@ size_t UnweightedGraph::addEdge(size_t nodeA, size_t nodeB, size_t weight)
 	return 0;
 }
 
-size_t UnweightedGraph::addEdge(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB, size_t weight)
+size_t Graph::addEdge(shared_ptr<GraphNode> nodeA, shared_ptr<GraphNode> nodeB, size_t weight)
 {
 	if (!nodeA || !nodeB || nodeA == nodeB)
 		throw invalid_argument("'nodeA' and 'nodeB' can't be null nor the same.");
@@ -59,12 +59,12 @@ size_t UnweightedGraph::addEdge(shared_ptr<UnweightedGraphNode> nodeA, shared_pt
 		return nodeA->addEdge(nodeB, weight);
 }
 
-size_t UnweightedGraph::countNodes()
+size_t Graph::countNodes()
 {
 	if (!root)
 		return 0;
 
-	shared_ptr<UnweightedGraphNode> current = root;
+	shared_ptr<GraphNode> current = root;
 	size_t nrNodes = 0;
 
 	do
@@ -75,10 +75,10 @@ size_t UnweightedGraph::countNodes()
 	return nrNodes;
 }
 
-bool UnweightedGraph::isPath(size_t nodeA, size_t nodeB)
+bool Graph::isPath(size_t nodeA, size_t nodeB)
 {
-	shared_ptr<UnweightedGraphNode> nA = findNode(nodeA);
-	shared_ptr<UnweightedGraphNode> nB = findNode(nodeB);
+	shared_ptr<GraphNode> nA = findNode(nodeA);
+	shared_ptr<GraphNode> nB = findNode(nodeB);
 
 	if (nA && nB)
 		return isPath(nA, nB);
@@ -91,7 +91,7 @@ bool UnweightedGraph::isPath(size_t nodeA, size_t nodeB)
 	return false;
 }
 
-bool UnweightedGraph::isPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB)
+bool Graph::isPath(shared_ptr<GraphNode> nodeA, shared_ptr<GraphNode> nodeB)
 {
 	if (!nodeA || !nodeB || nodeA == nodeB)
 		throw invalid_argument("'nodeA' and 'nodeB' can't be null nor the same.");
@@ -102,14 +102,14 @@ bool UnweightedGraph::isPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<U
 	printC("#(" + to_string(nodeA->value) + ") <- ", C_CYAN);
 	file << "#(" << to_string(nodeA->value) << ") <- ";
 
-	QueueSingly<UnweightedGraphNode> queue;
-	map<shared_ptr<UnweightedGraphNode>, shared_ptr<UnweightedGraphNode>> visited;
+	QueueSingly<GraphNode> queue;
+	map<shared_ptr<GraphNode>, shared_ptr<GraphNode>> visited;
 
 	queue.push_back(nodeA);
 
 	while (!queue.isEmpty())
 	{
-		shared_ptr<UnweightedGraphNode> current = queue.pop();
+		shared_ptr<GraphNode> current = queue.pop();
 
 		if (current == nodeB)
 		{
@@ -118,10 +118,10 @@ bool UnweightedGraph::isPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<U
 			break;
 		}
 
-		shared_ptr<SinglyItem<UnweightedGraphEdge>> edge = current->edges.front();
+		shared_ptr<SinglyItem<GraphEdge>> edge = current->edges.front();
 		while (edge)
 		{
-			shared_ptr<UnweightedGraphNode> node = edge->reference->getToNode(current);
+			shared_ptr<GraphNode> node = edge->reference->getToNode(current);
 
 			if (!visited[node])
 			{
@@ -137,8 +137,8 @@ bool UnweightedGraph::isPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<U
 
 	if (found)
 	{
-		shared_ptr<UnweightedGraphNode> current = nodeB;
-		StackSingly<UnweightedGraphNode> path;
+		shared_ptr<GraphNode> current = nodeB;
+		StackSingly<GraphNode> path;
 
 		while (visited[current] != nodeA)
 		{
@@ -148,7 +148,7 @@ bool UnweightedGraph::isPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<U
 
 		while (!path.isEmpty())
 		{
-			shared_ptr<UnweightedGraphNode> node = path.pop();
+			shared_ptr<GraphNode> node = path.pop();
 			cout << to_string(node->value);
 			file << to_string(node->value);
 
@@ -174,11 +174,11 @@ bool UnweightedGraph::isPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<U
 	return found;
 }
 
-shared_ptr<UnweightedGraphNode> UnweightedGraph::findNode(size_t value)
+shared_ptr<GraphNode> Graph::findNode(size_t value)
 {
 	if (root)
 	{
-		shared_ptr<UnweightedGraphNode> current = root;
+		shared_ptr<GraphNode> current = root;
 
 		do {
 			if (current->value == value)
@@ -190,22 +190,22 @@ shared_ptr<UnweightedGraphNode> UnweightedGraph::findNode(size_t value)
 	return nullptr;
 }
 
-bool UnweightedGraph::isConnected()
+bool Graph::isConnected()
 {
-	StackSingly<UnweightedGraphNode> stack;
-	ListSingly<UnweightedGraphNode> visited;
+	StackSingly<GraphNode> stack;
+	ListSingly<GraphNode> visited;
 
 	stack.push(root);
 
 	while (!stack.isEmpty())
 	{
-		shared_ptr<UnweightedGraphNode> current = stack.pop();
+		shared_ptr<GraphNode> current = stack.pop();
 
 		if (!visited.contains(current))
 		{
 			visited.push(current);
 
-			shared_ptr<SinglyItem<UnweightedGraphEdge>> edge = current->edges.front();
+			shared_ptr<SinglyItem<GraphEdge>> edge = current->edges.front();
 			while (edge)
 			{
 				stack.push(edge->reference->getToNode(current));
@@ -228,10 +228,10 @@ bool UnweightedGraph::isConnected()
 	return connected;
 }
 
-bool UnweightedGraph::dijkstraPath(size_t nodeA, size_t nodeB)
+bool Graph::dijkstraPath(size_t nodeA, size_t nodeB)
 {
-	shared_ptr<UnweightedGraphNode> nA = findNode(nodeA);
-	shared_ptr<UnweightedGraphNode> nB = findNode(nodeB);
+	shared_ptr<GraphNode> nA = findNode(nodeA);
+	shared_ptr<GraphNode> nB = findNode(nodeB);
 
 	if (nA && nB)
 		return dijkstraPath(nA, nB);
@@ -244,33 +244,33 @@ bool UnweightedGraph::dijkstraPath(size_t nodeA, size_t nodeB)
 	return false;
 }
 
-bool UnweightedGraph::dijkstraPath(shared_ptr<UnweightedGraphNode> nodeA, shared_ptr<UnweightedGraphNode> nodeB)
+bool Graph::dijkstraPath(shared_ptr<GraphNode> nodeA, shared_ptr<GraphNode> nodeB)
 {
 	if (!nodeA || !nodeB || nodeA == nodeB)
 		throw invalid_argument("'nodeA' and 'nodeB' can't be null nor the same.");
 
-	map<shared_ptr<UnweightedGraphNode>, DijkstraItem> nodes;
+	map<shared_ptr<GraphNode>, DijkstraItem> nodes;
 	bool nodeAConnected = false;
 	bool nodeBConnected = false;
 
 	printC("$(" + to_string(nodeA->value) + ") <- ", C_CYAN);
 
-	shared_ptr<UnweightedGraphNode> temp = root;
+	shared_ptr<GraphNode> temp = root;
 	do {
 		nodes[temp] = DijkstraItem();
 	} while (temp = temp->next);
 
-	shared_ptr<UnweightedGraphNode> current = nodeA;
+	shared_ptr<GraphNode> current = nodeA;
 	nodes[current].cost = 0;
 
 	while (current != nodeB)
 	{
 		nodes[current].visited = true;
 
-		shared_ptr<SinglyItem<UnweightedGraphEdge>> edge = current->edges.front();
+		shared_ptr<SinglyItem<GraphEdge>> edge = current->edges.front();
 		while (edge)
 		{
-			shared_ptr<UnweightedGraphNode> toNode = edge->reference->getToNode(current);
+			shared_ptr<GraphNode> toNode = edge->reference->getToNode(current);
 			if (edge->reference->weight + nodes[current].cost < nodes[toNode].cost)
 			{
 				nodes[toNode].cost = edge->reference->weight + nodes[current].cost;
@@ -283,7 +283,7 @@ bool UnweightedGraph::dijkstraPath(shared_ptr<UnweightedGraphNode> nodeA, shared
 		// Check when all the nodes have been visited and there's nowhere else to go
 		bool allVisited = true;
 
-		for (pair<shared_ptr<UnweightedGraphNode>, DijkstraItem> n : nodes)
+		for (pair<shared_ptr<GraphNode>, DijkstraItem> n : nodes)
 		{
 			if (n.second.cost < nodes[current].cost && !n.second.visited || nodes[current].visited)
 				current = n.first;
@@ -299,7 +299,7 @@ bool UnweightedGraph::dijkstraPath(shared_ptr<UnweightedGraphNode> nodeA, shared
 			nodeBConnected = true;
 	}
 
-	for (pair<shared_ptr<UnweightedGraphNode>, DijkstraItem> n : nodes)
+	for (pair<shared_ptr<GraphNode>, DijkstraItem> n : nodes)
 		if (n.second.fromRef.lock() == nodeA)
 		{
 			nodeAConnected = true;
@@ -308,8 +308,8 @@ bool UnweightedGraph::dijkstraPath(shared_ptr<UnweightedGraphNode> nodeA, shared
 
 	if (nodeAConnected && nodeBConnected)
 	{
-		StackSingly<UnweightedGraphNode> stack;
-		shared_ptr<UnweightedGraphNode> nodeToFind = nodes[nodeB].fromRef.lock();
+		StackSingly<GraphNode> stack;
+		shared_ptr<GraphNode> nodeToFind = nodes[nodeB].fromRef.lock();
 
 		while (nodeToFind != nodeA)
 		{
@@ -320,7 +320,7 @@ bool UnweightedGraph::dijkstraPath(shared_ptr<UnweightedGraphNode> nodeA, shared
 
 		while(!stack.isEmpty())
 		{
-			shared_ptr<UnweightedGraphNode> nodeToPrint = stack.pop();
+			shared_ptr<GraphNode> nodeToPrint = stack.pop();
 
 			cout << to_string(nodeToPrint->value);
 			
@@ -343,7 +343,7 @@ bool UnweightedGraph::dijkstraPath(shared_ptr<UnweightedGraphNode> nodeA, shared
 	return nodeAConnected && nodeBConnected;
 }
 
-void UnweightedGraph::traversalBFS()
+void Graph::traversalBFS()
 {
 	ofstream file("Graph.txt");
 	bool isFirst = true;
@@ -351,20 +351,20 @@ void UnweightedGraph::traversalBFS()
 	printC("#(" + to_string(root->value) + ") -> ", C_CYAN);
 	file << "#(" << to_string(root->value) << ") -> ";
 
-	QueueSingly<UnweightedGraphNode> queue;
-	ListSingly<UnweightedGraphNode> visited;
+	QueueSingly<GraphNode> queue;
+	ListSingly<GraphNode> visited;
 
 	queue.push_back(root);
 
 	while (!queue.isEmpty())
 	{
-		shared_ptr<UnweightedGraphNode> current = queue.pop();
+		shared_ptr<GraphNode> current = queue.pop();
 
 		if (!visited.contains(current))
 		{
 			visited.push(current);
 
-			shared_ptr<SinglyItem<UnweightedGraphEdge>> edge = current->edges.front();
+			shared_ptr<SinglyItem<GraphEdge>> edge = current->edges.front();
 			while (edge)
 			{
 				queue.push_back(edge->reference->getToNode(current));
@@ -403,7 +403,7 @@ void UnweightedGraph::traversalBFS()
 	file.close();
 }
 
-void UnweightedGraph::traversalDFS()
+void Graph::traversalDFS()
 {
 	ofstream file("Graph.txt");
 	bool isFirst = true;
@@ -411,20 +411,20 @@ void UnweightedGraph::traversalDFS()
 	printC("#(" + to_string(root->value) + ") -> ", C_CYAN);
 	file << "#(" << to_string(root->value) << ") -> ";
 
-	StackSingly<UnweightedGraphNode> stack;
-	ListSingly<UnweightedGraphNode> visited;
+	StackSingly<GraphNode> stack;
+	ListSingly<GraphNode> visited;
 
 	stack.push(root);
 
 	while (!stack.isEmpty())
 	{
-		shared_ptr<UnweightedGraphNode> current = stack.pop();
+		shared_ptr<GraphNode> current = stack.pop();
 
 		if (!visited.contains(current))
 		{
 			visited.push(current);
 
-			shared_ptr<SinglyItem<UnweightedGraphEdge>> edge = current->edges.front();
+			shared_ptr<SinglyItem<GraphEdge>> edge = current->edges.front();
 			while (edge)
 			{
 				stack.push(edge->reference->getToNode(current));
@@ -463,14 +463,14 @@ void UnweightedGraph::traversalDFS()
 	file.close();
 }
 
-void UnweightedGraph::print()
+void Graph::print()
 {
-	shared_ptr<UnweightedGraphNode> current = root;
+	shared_ptr<GraphNode> current = root;
 
 	do {
 		cout << to_string(current->value) << " -> ";
 
-		shared_ptr<SinglyItem<UnweightedGraphEdge>> edge = current->edges.front();
+		shared_ptr<SinglyItem<GraphEdge>> edge = current->edges.front();
 		while (edge)
 		{
 			cout << to_string(edge->reference->getToNode(current)->value);

@@ -1,22 +1,22 @@
 #include "CppUnitTest.h"
 #include "TestsHelper.h"
-#include "../UnweightedGraphEdge.h"
-#include "../UnweightedGraphNode.h"
+#include "../GraphEdge.h"
+#include "../GraphNode.h"
 #include <memory>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std;
 
-TEST_CLASS(UnweightedGraphEdgeTests)
+TEST_CLASS(GraphEdgeTests)
 {
 public:
 
 	TEST_METHOD(Constructor_ValidInput_CreatesEdge)
 	{
-		shared_ptr<UnweightedGraphNode> nodeA = make_shared<UnweightedGraphNode>(5);
-		shared_ptr<UnweightedGraphNode> nodeB = make_shared<UnweightedGraphNode>(6);
+		shared_ptr<GraphNode> nodeA = make_shared<GraphNode>(5);
+		shared_ptr<GraphNode> nodeB = make_shared<GraphNode>(6);
 
-		unique_ptr<UnweightedGraphEdge> edge = make_unique<UnweightedGraphEdge>(nodeA, nodeB, 50);
+		unique_ptr<GraphEdge> edge = make_unique<GraphEdge>(nodeA, nodeB, 50);
 
 		Assert::IsNotNull(edge.get(), L"Valid input but edge not created.");
 	}
@@ -28,7 +28,7 @@ public:
 
 		try
 		{
-			unique_ptr<UnweightedGraphEdge> edge = make_unique<UnweightedGraphEdge>(nullptr, nullptr, 50);
+			unique_ptr<GraphEdge> edge = make_unique<GraphEdge>(nullptr, nullptr, 50);
 		}
 		catch (invalid_argument)
 		{
@@ -40,10 +40,10 @@ public:
 
 	TEST_METHOD(CreatedEdge_ValidInput_CheckPropertiesValues)
 	{
-		shared_ptr<UnweightedGraphNode> nodeA = make_shared<UnweightedGraphNode>(5);
-		shared_ptr<UnweightedGraphNode> nodeB = make_shared<UnweightedGraphNode>(6);
+		shared_ptr<GraphNode> nodeA = make_shared<GraphNode>(5);
+		shared_ptr<GraphNode> nodeB = make_shared<GraphNode>(6);
 
-		unique_ptr<UnweightedGraphEdge> edge = make_unique<UnweightedGraphEdge>(nodeA, nodeB, 50);
+		unique_ptr<GraphEdge> edge = make_unique<GraphEdge>(nodeA, nodeB, 50);
 
 		Assert::IsNotNull(edge->nodeA.lock().get(), L"'Node A' is nullptr.");
 		Assert::IsNotNull(edge->nodeB.lock().get(), L"'Node B' is nullptr.");
@@ -54,17 +54,17 @@ public:
 
 	TEST_METHOD(GetToNode_Returns_RightNode)
 	{
-		shared_ptr<UnweightedGraphNode> nodeA = make_shared<UnweightedGraphNode>(5);
-		shared_ptr<UnweightedGraphNode> nodeB = make_shared<UnweightedGraphNode>(6);
+		shared_ptr<GraphNode> nodeA = make_shared<GraphNode>(5);
+		shared_ptr<GraphNode> nodeB = make_shared<GraphNode>(6);
 
-		unique_ptr<UnweightedGraphEdge> edge = make_unique<UnweightedGraphEdge>(nodeA, nodeB, 50);
+		unique_ptr<GraphEdge> edge = make_unique<GraphEdge>(nodeA, nodeB, 50);
 
-		shared_ptr<UnweightedGraphNode> result = edge->getToNode(nodeA);
+		shared_ptr<GraphNode> result = edge->getToNode(nodeA);
 
 		Assert::IsNotNull(result.get(), L"'result' is nullptr.");
 		Assert::AreEqual(result->value, nodeB->value, L"'result' value is not right.");
 
-		shared_ptr<UnweightedGraphNode> resultB = edge->getToNode(nodeB);
+		shared_ptr<GraphNode> resultB = edge->getToNode(nodeB);
 
 		Assert::IsNotNull(resultB.get(), L"'resultB' is nullptr.");
 		Assert::AreEqual(resultB->value, nodeA->value, L"'resultB' value is not right.");

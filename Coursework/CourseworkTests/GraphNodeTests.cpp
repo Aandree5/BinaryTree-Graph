@@ -1,26 +1,26 @@
 #include "CppUnitTest.h"
 #include "TestsHelper.h"
-#include "../UnweightedGraphEdge.h"
-#include "../UnweightedGraphNode.h"
+#include "../GraphEdge.h"
+#include "../GraphNode.h"
 #include <memory>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std;
 
-TEST_CLASS(UnweightedGraphNodeTests)
+TEST_CLASS(GraphNodeTests)
 {
 public:
 
 	TEST_METHOD(Constructor_ValidInput_CreatesNode)
 	{
-		shared_ptr<UnweightedGraphNode> node = make_shared<UnweightedGraphNode>(5);
+		shared_ptr<GraphNode> node = make_shared<GraphNode>(5);
 
 		Assert::IsNotNull(node.get(), L"Valid input but edge not created.");
 	}
 
 	TEST_METHOD(CreatedNode_ValidInput_CheckPropertiesValues)
 	{
-		shared_ptr<UnweightedGraphNode> node = make_shared<UnweightedGraphNode>(5);
+		shared_ptr<GraphNode> node = make_shared<GraphNode>(5);
 
 		Assert::AreEqual(node->value, (size_t)5, L"'Node A' value is not right.");
 		Assert::IsNull(node->next.get(), L"'node' next pointer not null.");
@@ -28,8 +28,8 @@ public:
 
 	TEST_METHOD(AddEdge_ValidInput_AddsEdge)
 	{
-		shared_ptr<UnweightedGraphNode> nodeA = make_shared<UnweightedGraphNode>(5);
-		shared_ptr<UnweightedGraphNode> nodeB = make_shared<UnweightedGraphNode>(6);
+		shared_ptr<GraphNode> nodeA = make_shared<GraphNode>(5);
+		shared_ptr<GraphNode> nodeB = make_shared<GraphNode>(6);
 
 		nodeA->addEdge(nodeB, 2);
 
@@ -42,7 +42,7 @@ public:
 
 	TEST_METHOD(AddEdge_InvalidInput_Fails)
 	{
-		shared_ptr<UnweightedGraphNode> nodeA = make_shared<UnweightedGraphNode>(5);
+		shared_ptr<GraphNode> nodeA = make_shared<GraphNode>(5);
 		bool passed = false;
 
 		try
@@ -59,8 +59,8 @@ public:
 
 	TEST_METHOD(AddEdge_ValidInput_AlreadyExists)
 	{
-		shared_ptr<UnweightedGraphNode> nodeA = make_shared<UnweightedGraphNode>(5);
-		shared_ptr<UnweightedGraphNode> nodeB = make_shared<UnweightedGraphNode>(6);
+		shared_ptr<GraphNode> nodeA = make_shared<GraphNode>(5);
+		shared_ptr<GraphNode> nodeB = make_shared<GraphNode>(6);
 
 		nodeA->addEdge(nodeB, 2);
 

@@ -27,16 +27,7 @@
     <ClInclude Include="ConsoleHelpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UnweightedGraph.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SinglyItems.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UnweightedGraphEdge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UnweightedGraphNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ListSingly.h">
@@ -46,6 +37,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StackSingly.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphEdge.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -59,16 +59,16 @@
     <ClCompile Include="BinaryTree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UnweightedGraph.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BinaryTreeNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UnweightedGraphEdge.cpp">
+    <ClCompile Include="Graph.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UnweightedGraphNode.cpp">
+    <ClCompile Include="GraphEdge.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

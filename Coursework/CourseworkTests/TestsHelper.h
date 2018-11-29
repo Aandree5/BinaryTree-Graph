@@ -1,6 +1,6 @@
 #include "CppUnitTest.h"
 #include "../BinaryTreeNode.h"
-#include "../UnweightedGraphNode.h"
+#include "../GraphNode.h"
 
 /* ToString specialisation */
 namespace Microsoft{ namespace VisualStudio{ namespace CppUnitTestFramework
@@ -15,7 +15,7 @@ namespace Microsoft{ namespace VisualStudio{ namespace CppUnitTestFramework
 				RETURN_WIDE_STRING(*t);
 			}
 
-			template<> static std::wstring ToString<shared_ptr<UnweightedGraphNode>>(const shared_ptr<UnweightedGraphNode> &t)
+			template<> static std::wstring ToString<shared_ptr<GraphNode>>(const shared_ptr<GraphNode> &t)
 			{
 				RETURN_WIDE_STRING(*t);
 			}

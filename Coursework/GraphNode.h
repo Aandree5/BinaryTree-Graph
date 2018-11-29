@@ -7,26 +7,26 @@
 
 using namespace std;
 
-class UnweightedGraphEdge;
+class GraphEdge;
 
-class UnweightedGraphNode : public enable_shared_from_this<UnweightedGraphNode>
+class GraphNode : public enable_shared_from_this<GraphNode>
 {
 public:
 	size_t value;
-	ListSingly<UnweightedGraphEdge> edges;
-	shared_ptr<UnweightedGraphNode> next;
+	ListSingly<GraphEdge> edges;
+	shared_ptr<GraphNode> next;
 
 	///<summary>Creates a graph node with the given value.</summary>
 	///<remark>BigO notation for worst case is O(1).</remark>
 	///<param name="value">Value for the node.</param>
-	UnweightedGraphNode(size_t value);
+	GraphNode(size_t value);
 
 	///<summary>Creates a graph edge between this node and the given one, with the given weight.</summary>
 	///<remark>BigO notation for worst case is O(n).</remark>
 	///<param name="toNode">Pointer to the node to connect to.</param>
 	///<param name="weight">Positive value for the edge weight.</param>
 	///<returns>The number of edges of this node.</returns>
-	size_t addEdge(shared_ptr<UnweightedGraphNode> toNode, size_t weight);
+	size_t addEdge(shared_ptr<GraphNode> toNode, size_t weight);
 
 
 	// ### Operators ###
@@ -35,14 +35,14 @@ public:
 		return to_string(value);
 	}
 
-	friend ostream &operator<<(ostream &os, const UnweightedGraphNode &node)
+	friend ostream &operator<<(ostream &os, const GraphNode &node)
 	{
 		os << to_string(node.value);
 
 		return os;
 	}
 
-	friend wostream &operator<<(wostream &wos, const UnweightedGraphNode &node)
+	friend wostream &operator<<(wostream &wos, const GraphNode &node)
 	{
 		wos << to_string(node.value).c_str();
 

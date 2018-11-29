@@ -1,18 +1,18 @@
 #include "pch.h"
-#include "UnweightedGraphNode.h"
-#include "UnweightedGraphEdge.h"
+#include "GraphNode.h"
+#include "GraphEdge.h"
 
-UnweightedGraphNode::UnweightedGraphNode(size_t value)
+GraphNode::GraphNode(size_t value)
 {
 	this->value = value;
 }
 
-size_t UnweightedGraphNode::addEdge(shared_ptr<UnweightedGraphNode> toNode, size_t weight)
+size_t GraphNode::addEdge(shared_ptr<GraphNode> toNode, size_t weight)
 {
 	if (!toNode)
 		throw invalid_argument("'toNode' can't be null");
 
-	shared_ptr<SinglyItem<UnweightedGraphEdge>> edge = edges.front();
+	shared_ptr<SinglyItem<GraphEdge>> edge = edges.front();
 	bool found = false;
 
 	while (edge)
@@ -32,7 +32,7 @@ size_t UnweightedGraphNode::addEdge(shared_ptr<UnweightedGraphNode> toNode, size
 
 	if (!found)
 	{
-		shared_ptr<UnweightedGraphEdge> newEdge = make_shared<UnweightedGraphEdge>(shared_from_this(), toNode, weight);
+		shared_ptr<GraphEdge> newEdge = make_shared<GraphEdge>(shared_from_this(), toNode, weight);
 
 		edges.push(newEdge);
 
