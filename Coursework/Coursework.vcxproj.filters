@@ -27,9 +27,6 @@
     <ClInclude Include="ConsoleHelpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SinglyItems.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ListSingly.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -46,6 +43,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GraphNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SinglyItem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -5,7 +5,7 @@
 #include <vector>
 #include <map>
 #include <fstream>
-#include "SinglyItems.h"
+#include "SinglyItem.h"
 #include "QueueSingly.h"
 #include "StackSingly.h"
 #include "ListSingly.h"

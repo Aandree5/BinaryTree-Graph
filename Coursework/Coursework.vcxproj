@@ -158,7 +158,7 @@
     <ClInclude Include="ListSingly.h" />
     <ClInclude Include="QueueSingly.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="SinglyItems.h" />
+    <ClInclude Include="SinglyItem.h" />
     <ClInclude Include="StackSingly.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="GraphEdge.h" />
