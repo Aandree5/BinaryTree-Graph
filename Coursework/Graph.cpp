@@ -306,6 +306,8 @@ bool Graph::dijkstraPath(shared_ptr<GraphNode> nodeA, shared_ptr<GraphNode> node
 			break;
 		}
 
+	bool nodesConnected = true;
+
 	if (nodeAConnected && nodeBConnected)
 	{
 		StackSingly<GraphNode> stack;
@@ -316,23 +318,33 @@ bool Graph::dijkstraPath(shared_ptr<GraphNode> nodeA, shared_ptr<GraphNode> node
 			stack.push(nodeToFind);
 
 			nodeToFind = nodes[nodeToFind].fromRef.lock();
+
+			if (stack.contains(nodeToFind))
+			{
+				nodesConnected = false;
+				break;
+			}
 		}
 
-		while(!stack.isEmpty())
+		if (nodesConnected)
 		{
-			shared_ptr<GraphNode> nodeToPrint = stack.pop();
+			while (!stack.isEmpty())
+			{
+				shared_ptr<GraphNode> nodeToPrint = stack.pop();
 
-			cout << to_string(nodeToPrint->value);
-			
-			if (!stack.isEmpty())
-				cout << " - ";
+				cout << to_string(nodeToPrint->value);
+
+				if (!stack.isEmpty())
+					cout << " - ";
+			}
+
+
+			printC(" -> (" + to_string(nodeB->value) + ")", C_CYAN);
+			printC(" [" + to_string(nodes[nodeB].cost) + "]", C_BROWN);
 		}
-
-
-		printC(" -> (" + to_string(nodeB->value) + ")", C_CYAN);
-		printC(" [" + to_string(nodes[nodeB].cost) + "]", C_BROWN);
 	}
-	else
+	
+	if (!nodeAConnected || !nodeBConnected || !nodesConnected)
 	{
 		printC("### No path ###", C_RED);
 		printC(" -> (" + to_string(nodeB->value) + ")", C_CYAN);
@@ -340,7 +352,7 @@ bool Graph::dijkstraPath(shared_ptr<GraphNode> nodeA, shared_ptr<GraphNode> node
 
 	cout << endl << endl;
 
-	return nodeAConnected && nodeBConnected;
+	return nodeAConnected && nodeBConnected && nodesConnected;
 }
 
 void Graph::traversalBFS()
